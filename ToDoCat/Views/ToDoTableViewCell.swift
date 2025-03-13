@@ -28,7 +28,7 @@ class ToDoTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .gray
-        label.textAlignment = .right
+        label.textAlignment = .left
         return label
     }()
     
@@ -38,6 +38,24 @@ class ToDoTableViewCell: UITableViewCell {
         label.textColor = .darkGray
         label.numberOfLines = 2  // 최대 2줄로 제한
         return label
+    }()
+    
+    private let contentStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 4
+        stackView.distribution = .fill
+        stackView.alignment = .leading
+        return stackView
+    }()
+    
+    private let containerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 12
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        return stackView
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -51,28 +69,24 @@ class ToDoTableViewCell: UITableViewCell {
      }
 
     private func setupCell() {
-        contentView.addSubview(toDoImageView)
-        contentView.addSubview(dateTimeLabel)
-        contentView.addSubview(contentPreviewLabel)
+        self.selectionStyle = .none
+        
+        contentView.addSubview(containerStackView)
+        
+        containerStackView.addArrangedSubview(toDoImageView)
+        containerStackView.addArrangedSubview(contentStackView)
+        
+        contentStackView.addArrangedSubview(dateTimeLabel)
+        contentStackView.addArrangedSubview(contentPreviewLabel)
+        
+        containerStackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(10)
+        }
         
         toDoImageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
-            make.width.height.equalTo(60)
+            make.width.height.equalTo(50)
         }
-        
-        dateTimeLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-16)
-            make.leading.greaterThanOrEqualTo(contentPreviewLabel.snp.trailing).offset(8)
-        }
-        
-        contentPreviewLabel.snp.makeConstraints { make in
-            make.top.equalTo(dateTimeLabel).offset(4)
-            make.leading.equalTo(toDoImageView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().offset(-16)
-            make.bottom.equalToSuperview().offset(-12)
-        }
+
     }
     
     // MARK: - Configuration
