@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct ToDoModel {
+struct ToDoItem {
     let id: UUID
     let date: Date
     let content: String
