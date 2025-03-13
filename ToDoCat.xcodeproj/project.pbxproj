@@ -73,7 +73,6 @@
 				F94C5A2B2D81B48000BD8B70 /* AppDelegate.swift */,
 				F94C5A322D81B48000BD8B70 /* SceneDelegate.swift */,
 				F94C5A432D81B96F00BD8B70 /* Views */,
-				F94C5A422D81B55C00BD8B70 /* Controllers */,
 				F94C5A402D81B54300BD8B70 /* ViewModels */,
 				F94C5A3F2D81B53300BD8B70 /* Models */,
 				F94C5A2C2D81B48000BD8B70 /* Assets.xcassets */,
@@ -113,6 +112,7 @@
 				F94C5A462D81BA1800BD8B70 /* HomeView.swift */,
 				F9224C892D827A7F009E5220 /* CalendarView.swift */,
 				F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */,
+				F94C5A422D81B55C00BD8B70 /* Controllers */,
 			);
 			path = Views;
 			sourceTree = "<group>";
