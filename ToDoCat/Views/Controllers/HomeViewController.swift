@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 import FSCalendar
 
 class HomeViewController: UIViewController {
@@ -16,7 +17,7 @@ class HomeViewController: UIViewController {
     override func loadView() {
         view = homeView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,8 +26,12 @@ class HomeViewController: UIViewController {
         
         homeViewModel.loadData()
         updateListView()
+        
+        homeView.calendarView.didChangeHeight = { [weak self] newHeight in
+            self?.adjustTableViewPosition(for: newHeight)
+        }
     }
-
+    
     private func setupNavigationBar() {
         title = "ToDoList"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -41,11 +46,11 @@ class HomeViewController: UIViewController {
         homeView.calendarView.setDelegate(self)
         
         // 리스트뷰 델리게이트 설정
-        homeView.toDoListView.setDelegate(self)
+        homeView.toDoTableView.setDelegate(self)
     }
     
     @objc private func addNewEntry() {
-            print("새 글 작성")
+        print("새 글 작성")
     }
     
     // 샘플 이미지 생성 (실제 앱에서는 사용자가 제공하는 이미지 사용)
@@ -58,9 +63,17 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - Private Methods
+    private func adjustTableViewPosition(for newHeight: CGFloat) {
+        // 캘린더 높이에 따라 테이블 뷰 위치 조정
+        homeView.toDoTableView.snp.updateConstraints { make in
+            make.top.equalTo(homeView.calendarView.snp.bottom)
+        }
+        homeView.layoutIfNeeded() // 레이아웃 업데이트
+    }
+    
     private func updateListView() {
-        homeView.toDoListView.showEmptyState(homeViewModel.filteredToDoList.isEmpty)
-        homeView.toDoListView.reloadData()
+        homeView.toDoTableView.showEmptyState(homeViewModel.filteredToDoList.isEmpty)
+        homeView.toDoTableView.reloadData()
     }
 }
 
@@ -75,6 +88,22 @@ extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource {
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let hasToDo = homeViewModel.filteredToDoList.contains(where: { $0.date == date })
         return hasToDo ? 1 : 0
+    }
+    
+    func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
+        UIView.animate(withDuration: 0.3) {
+            // 새로 변경될 캘린더의 높이
+            let newHeight = bounds.height
+            self.homeView.calendarView.snp.updateConstraints { make in
+                make.height.equalTo(newHeight)
+            }
+            // 테이블 뷰의 top 제약 조건을 변경
+            self.homeView.toDoTableView.snp.updateConstraints { make in
+                make.top.equalTo(self.homeView.calendarView.snp.bottom)
+            }
+            // 레이아웃 적용
+            self.homeView.layoutIfNeeded()
+        }
     }
 }
 
