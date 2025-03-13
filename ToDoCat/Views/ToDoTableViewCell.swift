@@ -12,7 +12,7 @@ class ToDoTableViewCell: UITableViewCell {
     
     static let identifier = "ToDoTableViewCell"
     
-    private let toDoimageView: UIImageView = {
+    private let toDoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -51,11 +51,11 @@ class ToDoTableViewCell: UITableViewCell {
      }
 
     private func setupCell() {
-        contentView.addSubview(toDoimageView)
+        contentView.addSubview(toDoImageView)
         contentView.addSubview(dateTimeLabel)
         contentView.addSubview(contentPreviewLabel)
         
-        toDoimageView.snp.makeConstraints { make in
+        toDoImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
             make.width.height.equalTo(60)
@@ -69,9 +69,36 @@ class ToDoTableViewCell: UITableViewCell {
         
         contentPreviewLabel.snp.makeConstraints { make in
             make.top.equalTo(dateTimeLabel).offset(4)
-            make.leading.equalTo(toDoimageView.snp.trailing).offset(12)
+            make.leading.equalTo(toDoImageView.snp.trailing).offset(12)
             make.trailing.equalToSuperview().offset(-16)
             make.bottom.equalToSuperview().offset(-12)
         }
+    }
+    
+    // MARK: - Configuration
+    func configure(with item: ToDoItem) {
+        contentPreviewLabel.text = item.content
+        
+        // 이미지 설정
+        if let image = item.image {
+            toDoImageView.image = image
+            toDoImageView.tintColor = nil
+        } else {
+            toDoImageView.image = UIImage(systemName: "photo")
+            toDoImageView.tintColor = .systemGray3
+        }
+        
+        // 날짜 및 시간 포맷팅
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        dateTimeLabel.text = formatter.string(from: item.date)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentPreviewLabel.text = nil
+        dateTimeLabel.text = nil
+        toDoImageView.image = UIImage(systemName: "photo")
+        toDoImageView.tintColor = .systemGray3
     }
 }

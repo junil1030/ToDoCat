@@ -11,6 +11,7 @@ import SnapKit
 class HomeView: UIView {
     
     let calendarView = CalendarView()
+    let toDoListView = ToDoTableView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,11 +26,18 @@ class HomeView: UIView {
         backgroundColor = .white
         
         addSubview(calendarView)
+        addSubview(toDoListView)
         
         calendarView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(self.snp.height).multipliedBy(0.5)
+        }
+        
+        toDoListView.snp.makeConstraints { make in
+            make.top.equalTo(calendarView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
         }
     }
 }

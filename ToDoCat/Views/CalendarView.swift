@@ -50,4 +50,13 @@ class CalendarView: UIView {
         }
     }
     
+    // MARK: - Public Methods
+     func setDelegate(_ delegate: FSCalendarDelegate & FSCalendarDataSource) {
+         calendarView.delegate = delegate
+         calendarView.dataSource = delegate
+     }
+    
+    func selectDate(_ date: Date) {
+        calendarView.select(date, scrollToDate: true)
+     }
 }

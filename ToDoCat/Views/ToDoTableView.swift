@@ -54,6 +54,16 @@ class ToDoTableView: UIView {
         }
     }
     
+    func setDelegate(_ delegate: UITableViewDelegate & UITableViewDataSource) {
+        tableView.delegate = delegate
+        tableView.dataSource = delegate
+    }
+    
+    func showEmptyState(_ show: Bool) {
+        emptyStateLabel.isHidden = !show
+        tableView.isHidden = show
+    }
+    
     func reloadData() {
         tableView.reloadData()
     }
