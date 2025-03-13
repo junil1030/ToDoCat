@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0CEC90D4897A13088D2BC63E /* Pods_ToDoCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B175CC31787362EF9F43532 /* Pods_ToDoCat.framework */; };
+		F9224C8A2D827A7F009E5220 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C892D827A7F009E5220 /* CalendarView.swift */; };
 		F94C5A372D81B48000BD8B70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F94C5A2C2D81B48000BD8B70 /* Assets.xcassets */; };
 		F94C5A392D81B48000BD8B70 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F94C5A2F2D81B48000BD8B70 /* LaunchScreen.storyboard */; };
 		F94C5A3B2D81B48000BD8B70 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C5A2B2D81B48000BD8B70 /* AppDelegate.swift */; };
@@ -21,6 +22,7 @@
 		1B175CC31787362EF9F43532 /* Pods_ToDoCat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoCat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F509F292C34EBE734B1FB7B /* Pods-ToDoCat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoCat.debug.xcconfig"; path = "Target Support Files/Pods-ToDoCat/Pods-ToDoCat.debug.xcconfig"; sourceTree = "<group>"; };
 		C87F012325C11B6DE0F03D09 /* Pods-ToDoCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoCat.release.xcconfig"; path = "Target Support Files/Pods-ToDoCat/Pods-ToDoCat.release.xcconfig"; sourceTree = "<group>"; };
+		F9224C892D827A7F009E5220 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		F94C5A2B2D81B48000BD8B70 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F94C5A2C2D81B48000BD8B70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F94C5A2D2D81B48000BD8B70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -50,7 +52,6 @@
 				2F509F292C34EBE734B1FB7B /* Pods-ToDoCat.debug.xcconfig */,
 				C87F012325C11B6DE0F03D09 /* Pods-ToDoCat.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -105,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				F94C5A462D81BA1800BD8B70 /* HomeView.swift */,
+				F9224C892D827A7F009E5220 /* CalendarView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -244,6 +246,7 @@
 			files = (
 				F94C5A3B2D81B48000BD8B70 /* AppDelegate.swift in Sources */,
 				F94C5A472D81BA1800BD8B70 /* HomeView.swift in Sources */,
+				F9224C8A2D827A7F009E5220 /* CalendarView.swift in Sources */,
 				F94C5A492D81BDD600BD8B70 /* MainTabBarController.swift in Sources */,
 				F94C5A3C2D81B48000BD8B70 /* SceneDelegate.swift in Sources */,
 				F94C5A3E2D81B48000BD8B70 /* HomeViewController.swift in Sources */,
@@ -279,7 +282,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -312,7 +315,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -6,17 +6,11 @@
 //
 
 import UIKit
+import SnapKit
 
 class HomeView: UIView {
-
-    let hellolabel: UILabel = {
-        let label = UILabel()
-        label.text = "Hello, World!"
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 30, weight: .bold)
-        label.textAlignment = .center
-        return label
-    }()
+    
+    let calendarView = CalendarView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,10 +24,12 @@ class HomeView: UIView {
     func setupUI() {
         backgroundColor = .white
         
-        addSubview(hellolabel)
+        addSubview(calendarView)
         
-        hellolabel.translatesAutoresizingMaskIntoConstraints = false
-        hellolabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        hellolabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        calendarView.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(self.snp.height).multipliedBy(0.5)
+        }
     }
 }
