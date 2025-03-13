@@ -11,6 +11,7 @@
 		F9224C8A2D827A7F009E5220 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C892D827A7F009E5220 /* CalendarView.swift */; };
 		F9224C8C2D827D86009E5220 /* ToDoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */; };
 		F9224C8E2D82962F009E5220 /* ToDoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C8D2D82960F009E5220 /* ToDoModel.swift */; };
+		F9224C922D82A37D009E5220 /* ToDoTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C912D82A37D009E5220 /* ToDoTableView.swift */; };
 		F94C5A372D81B48000BD8B70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F94C5A2C2D81B48000BD8B70 /* Assets.xcassets */; };
 		F94C5A392D81B48000BD8B70 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F94C5A2F2D81B48000BD8B70 /* LaunchScreen.storyboard */; };
 		F94C5A3B2D81B48000BD8B70 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C5A2B2D81B48000BD8B70 /* AppDelegate.swift */; };
@@ -27,6 +28,7 @@
 		F9224C892D827A7F009E5220 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableViewCell.swift; sourceTree = "<group>"; };
 		F9224C8D2D82960F009E5220 /* ToDoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoModel.swift; sourceTree = "<group>"; };
+		F9224C912D82A37D009E5220 /* ToDoTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableView.swift; sourceTree = "<group>"; };
 		F94C5A2B2D81B48000BD8B70 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F94C5A2C2D81B48000BD8B70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F94C5A2D2D81B48000BD8B70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			children = (
 				F94C5A462D81BA1800BD8B70 /* HomeView.swift */,
 				F9224C892D827A7F009E5220 /* CalendarView.swift */,
+				F9224C912D82A37D009E5220 /* ToDoTableView.swift */,
 				F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */,
 				F94C5A422D81B55C00BD8B70 /* Controllers */,
 			);
@@ -250,6 +253,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9224C922D82A37D009E5220 /* ToDoTableView.swift in Sources */,
 				F9224C8C2D827D86009E5220 /* ToDoTableViewCell.swift in Sources */,
 				F94C5A3B2D81B48000BD8B70 /* AppDelegate.swift in Sources */,
 				F94C5A472D81BA1800BD8B70 /* HomeView.swift in Sources */,

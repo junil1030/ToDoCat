@@ -12,7 +12,7 @@ import SnapKit
 class CalendarView: UIView {
 
     let calendarView: FSCalendar = {
-        var calendar = FSCalendar()
+        let calendar = FSCalendar()
         calendar.appearance.headerTitleColor = .black
         calendar.appearance.weekdayTextColor = .gray
         calendar.appearance.titleDefaultColor = .black

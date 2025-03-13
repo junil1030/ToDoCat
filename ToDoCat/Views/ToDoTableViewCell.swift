@@ -10,6 +10,8 @@ import SnapKit
 
 class ToDoTableViewCell: UITableViewCell {
     
+    static let identifier = "ToDoTableViewCell"
+    
     private let toDoimageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
