@@ -33,7 +33,7 @@ class HomeViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = "ToDoList"
+        title = "매일할고양"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
