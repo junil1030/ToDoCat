@@ -33,12 +33,11 @@ class HomeViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = "매일할고양"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .add,
-            target: self,
-            action: #selector(addNewEntry)
-        )
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(
+//            barButtonSystemItem: .add,
+//            target: self,
+//            action: #selector(addNewEntry)
+//        )
     }
     
     private func setupDelegates() {

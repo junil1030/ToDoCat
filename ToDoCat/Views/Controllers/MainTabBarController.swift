@@ -21,6 +21,8 @@ class MainTabBarController: UITabBarController {
         let homeNav = UINavigationController(rootViewController: homeVC)
         homeNav.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "square.and.pencil"), tag: 0)
         
+        let detailVC = DetailViewController()
+        
         viewControllers = [homeNav]
     }
 

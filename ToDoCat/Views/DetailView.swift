@@ -12,7 +12,7 @@ class DetailView: UIView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Common.getUIFontWithSize(size: 16)
+        label.font = UIFont.dohyeon(size: 16)
         label.textAlignment = .center
         label.text = "To Do"
         label.textColor = .black
@@ -21,7 +21,7 @@ class DetailView: UIView {
     
     lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.font = Common.getUIFontWithSize(size: 10)
+        label.font = UIFont.dohyeon(size: 10)
         label.textAlignment = .right
         label.textColor = .gray
         return label
@@ -34,14 +34,14 @@ class DetailView: UIView {
     
     lazy var getCatButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = Common.getUIFontWithSize(size: 10)
+        button.titleLabel?.font = UIFont.dohyeon(size: 10)
         button.setTitle("고양이 만나기", for: .normal)
         return button
     }()
     
     lazy var getDogButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = Common.getUIFontWithSize(size: 10)
+        button.titleLabel?.font = UIFont.dohyeon(size: 10)
         button.setTitle("강아지 만나기", for: .normal)
         return button
     }()
@@ -56,7 +56,7 @@ class DetailView: UIView {
     lazy var contentText: UITextView = {
         let textView = UITextView()
         textView.text = "할 일을 입력해보세요"
-        textView.font = Common.getUIFontWithSize(size: 12)
+        textView.font = UIFont.dohyeon(size: 12)
         textView.textColor = .black
         textView.layer.cornerRadius = 8
         textView.layer.masksToBounds = true

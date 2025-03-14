@@ -20,9 +20,9 @@ class CalendarView: UIView {
         calendar.appearance.todayColor = .systemBlue.withAlphaComponent(0.3)
         calendar.appearance.todaySelectionColor = .systemBlue
         calendar.appearance.headerDateFormat = "yyyy년 MM월"
-        calendar.appearance.headerTitleFont = UIFont.systemFont(ofSize: 16, weight: .medium)
-        calendar.appearance.titleFont = UIFont.systemFont(ofSize: 14)
-        calendar.appearance.weekdayFont = UIFont.systemFont(ofSize: 14)
+        calendar.appearance.headerTitleFont = UIFont.dohyeon(size: 16)
+        calendar.appearance.titleFont = UIFont.dohyeon(size: 14)
+        calendar.appearance.weekdayFont = UIFont.dohyeon(size: 14)
         calendar.scrollDirection = .horizontal
         calendar.pagingEnabled = true
         calendar.allowsMultipleSelection = false
@@ -48,7 +48,7 @@ class CalendarView: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .gray
+        backgroundColor = .white
         
         addSubview(calendarView)
         
