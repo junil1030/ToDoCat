@@ -14,8 +14,12 @@ class HomeViewController: UIViewController {
     private let homeView = HomeView()
     private let homeViewModel = HomeViewModel()
     
+    private let detailView = DetailView()
+    
     override func loadView() {
         view = homeView
+        
+        //view = detailView
     }
     
     override func viewDidLoad() {
@@ -27,17 +31,16 @@ class HomeViewController: UIViewController {
         homeViewModel.loadData()
         updateListView()
         
-        homeView.calendarView.didChangeHeight = { [weak self] newHeight in
-            self?.adjustTableViewPosition(for: newHeight)
-        }
+        setupBindings()
+
     }
     
     private func setupNavigationBar() {
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(
-//            barButtonSystemItem: .add,
-//            target: self,
-//            action: #selector(addNewEntry)
-//        )
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addNewEntry)
+        )
     }
     
     private func setupDelegates() {
@@ -48,8 +51,19 @@ class HomeViewController: UIViewController {
         homeView.toDoTableView.setDelegate(self)
     }
     
+    private func setupBindings() {
+        homeView.calendarView.didChangeHeight = { [weak self] newHeight in
+            self?.adjustTableViewPosition(for: newHeight)
+        }
+        
+        homeViewModel.navigateToDetailView = { [weak self] in
+            let detailViewController = DetailViewController()
+            self?.navigationController?.pushViewController(detailViewController, animated: true)
+        }
+    }
+    
     @objc private func addNewEntry() {
-        print("새 글 작성")
+        homeViewModel.addTaskButtonTapped()
     }
     
     // 샘플 이미지 생성 (실제 앱에서는 사용자가 제공하는 이미지 사용)
