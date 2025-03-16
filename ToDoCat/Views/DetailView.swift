@@ -21,7 +21,8 @@ class DetailView: UIView {
     
     lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.dohyeon(size: 10)
+        label.font = UIFont.dohyeon(size: 14)
+        label.text = DateHelper.currentDate()
         label.textAlignment = .right
         label.textColor = .gray
         return label
@@ -36,6 +37,12 @@ class DetailView: UIView {
         let button = UIButton()
         button.titleLabel?.font = UIFont.dohyeon(size: 10)
         button.setTitle("고양이 만나기", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.white.cgColor
+        button.clipsToBounds = true
         return button
     }()
     
@@ -43,13 +50,35 @@ class DetailView: UIView {
         let button = UIButton()
         button.titleLabel?.font = UIFont.dohyeon(size: 10)
         button.setTitle("강아지 만나기", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.white.cgColor
+        button.clipsToBounds = true
+        return button
+    }()
+    
+    lazy var getCustomImageButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = UIFont.dohyeon(size: 10)
+        button.setTitle("내 사진 추가", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.white.cgColor
+        button.clipsToBounds = true
         return button
     }()
     
     lazy var buttonStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [getCatButton, getDogButton])
+        let stackView = UIStackView(arrangedSubviews: [getCatButton, getDogButton, getCustomImageButton])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         return stackView
     }()
     
@@ -87,7 +116,8 @@ class DetailView: UIView {
         addSubview(totalStackView)
         
         totalStackView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
+            make.top.bottom.equalTo(safeAreaLayoutGuide)
+            make.leading.trailing.equalToSuperview()
         }
     }
 }
