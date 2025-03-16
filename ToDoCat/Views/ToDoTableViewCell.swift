@@ -102,10 +102,8 @@ class ToDoTableViewCell: UITableViewCell {
             toDoImageView.tintColor = .systemGray3
         }
         
-        // 날짜 및 시간 포맷팅
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        dateTimeLabel.text = formatter.string(from: item.date)
+        // 날짜 및 시간 설정
+        dateTimeLabel.text = DateHelper.currentDateTime()
     }
     
     override func prepareForReuse() {
