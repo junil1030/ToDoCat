@@ -16,10 +16,11 @@ class HomeViewController: UIViewController {
     
     private let detailView = DetailView()
     
+    private var cachedFilteredToDoList: [ToDoItem] = []
+    private var hasEventsCache: [Date: Bool] = [:]
+    
     override func loadView() {
         view = homeView
-        
-        //view = detailView
     }
     
     override func viewDidLoad() {
@@ -27,12 +28,16 @@ class HomeViewController: UIViewController {
         
         setupNavigationBar()
         setupDelegates()
-        
-        homeViewModel.loadData()
-        updateListView()
-        
         setupBindings()
-
+        
+        DispatchQueue.global(qos: .background).async {
+            self.homeViewModel.loadData()
+            
+            DispatchQueue.main.async {
+                self.updateFilteredToDoList()
+                self.updateListView()
+            }
+        }
     }
     
     private func setupNavigationBar() {
@@ -60,19 +65,17 @@ class HomeViewController: UIViewController {
             let detailViewController = DetailViewController()
             self?.navigationController?.pushViewController(detailViewController, animated: true)
         }
+        
+        homeViewModel.onDateUpdate = { [weak self] in
+            DispatchQueue.main.async {
+                self?.updateFilteredToDoList()
+                self?.updateListView()
+            }
+        }
     }
     
     @objc private func addNewEntry() {
         homeViewModel.addTaskButtonTapped()
-    }
-    
-    // 샘플 이미지 생성 (실제 앱에서는 사용자가 제공하는 이미지 사용)
-    private func createSampleImage(withColor color: UIColor) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 60, height: 60))
-        return renderer.image { ctx in
-            color.setFill()
-            ctx.fill(CGRect(x: 0, y: 0, width: 60, height: 60))
-        }
     }
     
     // MARK: - Private Methods
@@ -84,8 +87,19 @@ class HomeViewController: UIViewController {
         homeView.layoutIfNeeded() // 레이아웃 업데이트
     }
     
+    private func updateFilteredToDoList() {
+        // cachedFilteredToDoList = homeViewModel.getFilteredToDoList()
+        DispatchQueue.global(qos: .userInitiated).async {
+            let filteredList = self.homeViewModel.getFilteredToDoList()
+            DispatchQueue.main.async {
+                self.cachedFilteredToDoList = filteredList
+                self.updateListView()
+            }
+        }
+    }
+    
     private func updateListView() {
-        homeView.toDoTableView.showEmptyState(homeViewModel.filteredToDoList.isEmpty)
+        homeView.toDoTableView.showEmptyState(cachedFilteredToDoList.isEmpty)
         homeView.toDoTableView.reloadData()
     }
 }
@@ -95,12 +109,17 @@ extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         homeViewModel.updateSelectedDate(date)
-        updateListView()
+        print("개수\(homeViewModel.getFilteredToDoList().count)")
     }
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        let hasToDo = homeViewModel.filteredToDoList.contains(where: { $0.date == date })
-        return hasToDo ? 1 : 0
+        //return homeViewModel.hasToDoItem() ? 1 : 0
+        if let hasEvent = hasEventsCache[date] {
+            return hasEvent ? 1 : 0
+        }
+        let hasEvent = homeViewModel.hasToDoItem()
+        hasEventsCache[date] = hasEvent
+        return hasEvent ? 1 : 0
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
@@ -124,7 +143,8 @@ extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource {
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return homeViewModel.filteredToDoList.count
+        print("캐시 개수: \(cachedFilteredToDoList.count)")
+        return cachedFilteredToDoList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -135,7 +155,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let entry = homeViewModel.filteredToDoList[indexPath.row]
+        let entry = cachedFilteredToDoList[indexPath.row]
         cell.configure(with: entry)
         cell.accessoryType = .disclosureIndicator
         
