@@ -7,18 +7,26 @@
 import UIKit
 
 class DetailViewModel {
-    let currentTime: String
-    let content: String
-    let image: UIImage?
     
-    init(currentTime: String, content: String, image: UIImage?) {
-        self.currentTime = currentTime
-        self.content = content
-        self.image = image
-    }
     
-    private func saveData() {
+    // 새 항목 추가 메서드
+    func addEntry(content: String, image: UIImage? = nil, isCompleted: Bool = false, createdAt: Date = Date(), updatedAt: Date = Date()) {
+        let newToDo = ToDoItem(
+            id: UUID()
+            , content: content
+            , image: image ?? createSampleImage(withColor: .systemBlue)
+            , isCompleted: isCompleted
+            , createdAt: createdAt
+            , updatedAt: updatedAt)
         
     }
     
+    // 샘플 이미지 생성 (실제 앱에서는 사용자가 제공하는 이미지 사용)
+    private func createSampleImage(withColor color: UIColor) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 60, height: 60))
+        return renderer.image { ctx in
+            color.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 60, height: 60))
+        }
+    }
 }
