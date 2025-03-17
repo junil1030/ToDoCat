@@ -10,12 +10,20 @@ import UIKit
 class DetailViewController: UIViewController {
     
     var detailView = DetailView()
+    
+    override func loadView() {
+        super.loadView()
+        
+        view = detailView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view = detailView
+        setupUI()
     }
     
-
+    private func setupUI() {
+        
+    }
 }

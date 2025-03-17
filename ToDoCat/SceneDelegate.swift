@@ -20,11 +20,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = MainTabBarController()
         window?.makeKeyAndVisible()
         
-        for fontFamily in UIFont.familyNames {
-            for fontName in UIFont.fontNames(forFamilyName: fontFamily) {
-                print(fontName)
-            }
-        }
+//        for fontFamily in UIFont.familyNames {
+//            for fontName in UIFont.fontNames(forFamilyName: fontFamily) {
+//                print(fontName)
+//            }
+//        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
