@@ -17,7 +17,7 @@ class ToDoDataManager {
         
         Realm.Configuration.defaultConfiguration = realmConfig
         
-        //print("realm 위치 \(Realm.Configuration.defaultConfiguration.fileURL!)")
+        print("realm 위치 \(Realm.Configuration.defaultConfiguration.fileURL!)")
     }
     
     //MARK: - CRUD Methods
