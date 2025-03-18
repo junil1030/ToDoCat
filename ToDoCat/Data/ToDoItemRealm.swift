@@ -35,6 +35,21 @@ class ToDoItemRealm: Object {
     
     func toToDoItem() -> ToDoItem {
         let image = imageData != nil ? UIImage(data: imageData!) : nil
-        return ToDoItem(id: UUID(uuidString: id) ?? UUID(), content: content, image: image, isCompleted: isCompleted, createdAt: createdAt, updatedAt: updatedAt)
+        
+        let timezone = Common.korTimeZone
+        let createdAtKST = Calendar.current.date(byAdding: .second
+                                                 ,value: timezone.secondsFromGMT(for: createdAt)
+                                                 ,to: createdAt)!
+        let updatedAtKST = Calendar.current.date(byAdding: .second
+                                                 ,value: timezone.secondsFromGMT(for: updatedAt)
+                                                 ,to: updatedAt)!
+        
+        return ToDoItem(id: UUID(uuidString: id) ?? UUID()
+                        , content: content
+                        , image: image
+                        , isCompleted: isCompleted
+                        , createdAt: createdAtKST
+                        , updatedAt: updatedAtKST
+        )
     }
 }
