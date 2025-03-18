@@ -9,4 +9,5 @@ import UIKit
 struct Common {
     static var engTitle: String = "ToDoCat"
     static var korTitle: String = "매일할고양"
+    static var korTimeZone: TimeZone = TimeZone(identifier: "Asia/Seoul")!
 }
