@@ -50,29 +50,6 @@ class HomeViewModel {
         return filteredToDoList
     }
     
-    //MARK: - TestCode
-    
-    func testDataAppend() {
-        var a = ToDoDataManager.shared.createToDo(todoItem:
-                                            ToDoItem(
-                                                content: "테스트1", image: nil, isCompleted: true, createdAt: Date(), updatedAt: Date()))
-        var b = ToDoDataManager.shared.createToDo(todoItem:
-                                            ToDoItem(
-                                                content: "테스트2", image: nil, isCompleted: true, createdAt: Calendar.current.date(byAdding: .day, value: 1, to: Date())!, updatedAt: Date()))
-        var c = ToDoDataManager.shared.createToDo(todoItem:
-                                            ToDoItem(
-                                                content: "테스트3", image: nil, isCompleted: true, createdAt: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, updatedAt: Date()))
-        var d = ToDoDataManager.shared.createToDo(todoItem:
-                                            ToDoItem(
-                                                content: "테스트4", image: nil, isCompleted: true, createdAt: Calendar.current.date(byAdding: .day, value: 2, to: Date())!, updatedAt: Date()))
-        var e = ToDoDataManager.shared.createToDo(todoItem:
-                                            ToDoItem(
-                                                content: "테스트5", image: nil, isCompleted: true, createdAt: Calendar.current.date(byAdding: .day, value: -7, to: Date())!, updatedAt: Date()))
-        if !a || !b || !c || !d || !e {
-            print("실패")
-        }
-    }
-    
     //MARK: - Private Methods
     private func filterToDoList() {
         let calendar = Calendar.current
