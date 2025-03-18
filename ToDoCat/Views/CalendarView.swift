@@ -23,6 +23,7 @@ class CalendarView: UIView {
         calendar.appearance.headerTitleFont = UIFont.dohyeon(size: 16)
         calendar.appearance.titleFont = UIFont.dohyeon(size: 14)
         calendar.appearance.weekdayFont = UIFont.dohyeon(size: 14)
+        calendar.locale = Locale(identifier: "ko_KR")
         calendar.scrollDirection = .horizontal
         calendar.pagingEnabled = true
         calendar.allowsMultipleSelection = false
@@ -96,5 +97,9 @@ class CalendarView: UIView {
     
     func updateHeight(_ height: CGFloat) {
         calendarHeightConstraint?.update(offset: height)
+    }
+    
+    func reloadData() {
+        calendarView.reloadData()
     }
 }
