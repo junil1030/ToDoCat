@@ -17,7 +17,6 @@ class HomeViewController: UIViewController {
     private let detailView = DetailView()
     
     private var cachedFilteredToDoList: [ToDoItem] = []
-    private var hasEventsCache: [Date: Bool] = [:]
     
     override func loadView() {
         view = homeView
@@ -30,13 +29,10 @@ class HomeViewController: UIViewController {
         setupDelegates()
         setupBindings()
         
-        DispatchQueue.global(qos: .background).async {
-            self.homeViewModel.loadData()
-            
-            DispatchQueue.main.async {
-                self.updateFilteredToDoList()
-                self.updateListView()
-            }
+        homeViewModel.loadData() { [weak self] in
+            self?.updateFilteredToDoList()
+            self?.updateListView()
+            self?.reloadData()
         }
     }
     
@@ -102,6 +98,10 @@ class HomeViewController: UIViewController {
         homeView.toDoTableView.showEmptyState(cachedFilteredToDoList.isEmpty)
         homeView.toDoTableView.reloadData()
     }
+    
+    private func reloadData() {
+        homeView.calendarView.reloadData()
+    }
 }
 
 //MARK: - FSCalendar Delegate & DataSource
@@ -109,19 +109,14 @@ extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         homeViewModel.updateSelectedDate(date)
-        print("개수\(homeViewModel.getFilteredToDoList().count)")
+        print("선택한 날짜: \(date.toString())")
     }
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        //return homeViewModel.hasToDoItem() ? 1 : 0
-        if let hasEvent = hasEventsCache[date] {
-            return hasEvent ? 1 : 0
-        }
-        let hasEvent = homeViewModel.hasToDoItem()
-        hasEventsCache[date] = hasEvent
+        let hasEvent = homeViewModel.hasEvent(for: date)
         return hasEvent ? 1 : 0
     }
-    
+
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         UIView.animate(withDuration: 0.3) {
             // 새로 변경될 캘린더의 높이
@@ -143,7 +138,6 @@ extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource {
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("캐시 개수: \(cachedFilteredToDoList.count)")
         return cachedFilteredToDoList.count
     }
     
