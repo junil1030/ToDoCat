@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0CEC90D4897A13088D2BC63E /* Pods_ToDoCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B175CC31787362EF9F43532 /* Pods_ToDoCat.framework */; };
 		F90796B92D84103D000D6136 /* BMDOHYEON.otf in Resources */ = {isa = PBXBuildFile; fileRef = F90796B82D84103D000D6136 /* BMDOHYEON.otf */; };
-		F916B3092D86A6DB006C4EE9 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F916B3082D86A6CD006C4EE9 /* DateHelper.swift */; };
 		F916B30B2D86CC25006C4EE9 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F916B30A2D86CC09006C4EE9 /* DetailViewModel.swift */; };
 		F9224C8A2D827A7F009E5220 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C892D827A7F009E5220 /* CalendarView.swift */; };
 		F9224C8C2D827D86009E5220 /* ToDoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */; };
@@ -39,7 +38,6 @@
 		2F509F292C34EBE734B1FB7B /* Pods-ToDoCat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoCat.debug.xcconfig"; path = "Target Support Files/Pods-ToDoCat/Pods-ToDoCat.debug.xcconfig"; sourceTree = "<group>"; };
 		C87F012325C11B6DE0F03D09 /* Pods-ToDoCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoCat.release.xcconfig"; path = "Target Support Files/Pods-ToDoCat/Pods-ToDoCat.release.xcconfig"; sourceTree = "<group>"; };
 		F90796B82D84103D000D6136 /* BMDOHYEON.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BMDOHYEON.otf; sourceTree = "<group>"; };
-		F916B3082D86A6CD006C4EE9 /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		F916B30A2D86CC09006C4EE9 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		F9224C892D827A7F009E5220 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableViewCell.swift; sourceTree = "<group>"; };
@@ -183,7 +181,6 @@
 		F99B3E872D83D6B900879AB0 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				F916B3082D86A6CD006C4EE9 /* DateHelper.swift */,
 				F99B3E8A2D83D71300879AB0 /* Constants.swift */,
 			);
 			path = Helpers;
@@ -326,7 +323,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9F977A82D881382006B79FE /* String++.swift in Sources */,
-				F916B3092D86A6DB006C4EE9 /* DateHelper.swift in Sources */,
 				F99B3E982D83F82300879AB0 /* UIFont++.swift in Sources */,
 				F99B3E8F2D83F30900879AB0 /* DetailViewController.swift in Sources */,
 				F9224C922D82A37D009E5220 /* ToDoTableView.swift in Sources */,
