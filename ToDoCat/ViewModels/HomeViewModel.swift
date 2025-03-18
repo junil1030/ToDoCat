@@ -19,16 +19,25 @@ class HomeViewModel {
     
     //MARK: - Methods
     init() {
-        loadData()
+        loadData {
+            self.onDateUpdate?()
+        }
     }
     
-    func loadData() {
+    func printAllToDoList() {
+        for num in 0..<allToDoList.count {
+            print("content: \(allToDoList[num].content), createdAt: \(allToDoList[num].createdAt)")
+            
+        }
+    }
+    
+    func loadData(completion: @escaping () -> Void) {
         DispatchQueue.global(qos: .background).async {
             let todos = ToDoDataManager.shared.getAllToDos()
             
-            DispatchQueue.main.async {
-                self.allToDoList = todos
-                self.onDateUpdate?()
+            DispatchQueue.main.async { [weak self] in
+                self?.allToDoList = todos
+                completion()
             }
         }
     }
@@ -42,8 +51,11 @@ class HomeViewModel {
         navigateToDetailView?()
     }
     
-    func hasToDoItem() -> Bool {
-        return hasToDoCache
+    func hasEvent(for date: Date) -> Bool {
+        let calendar = Calendar.current
+        return allToDoList.contains {
+            return calendar.isDate($0.createdAt, inSameDayAs: date.toKST())
+        }
     }
     
     func getFilteredToDoList() -> [ToDoItem] {
