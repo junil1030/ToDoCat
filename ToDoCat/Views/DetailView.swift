@@ -22,7 +22,7 @@ class DetailView: UIView {
     lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.dohyeon(size: 14)
-        label.text = DateHelper.currentDate()
+        label.text = Date().toString(format: "yyyy-MM-dd")
         label.textAlignment = .right
         label.textColor = .gray
         return label
