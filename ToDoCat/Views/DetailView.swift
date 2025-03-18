@@ -30,6 +30,7 @@ class DetailView: UIView {
     
     lazy var titleImage: UIImageView = {
         let image = UIImageView()
+        image.image = UIImage(systemName: "photo.badge.magnifyingglass")?.resized(to: CGSize(width: 40, height: 40))
         return image
     }()
     
@@ -77,8 +78,8 @@ class DetailView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 10
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+//        stackView.isLayoutMarginsRelativeArrangement = true
+//        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         return stackView
     }()
     
@@ -95,11 +96,25 @@ class DetailView: UIView {
         return textView
     }()
     
+    lazy var addButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = UIFont.dohyeon(size: 14)
+        button.setTitle("할 일 추가", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.white.cgColor
+        button.clipsToBounds = true
+        return button
+    }()
+    
     lazy var totalStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, timeLabel, titleImage, buttonStackView, contentText])
-        stackView.spacing = 3
-        stackView.alignment = .fill
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, timeLabel, titleImage, buttonStackView, contentText, addButton])
         stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.spacing = 10
+        stackView.alignment = .fill
         return stackView
     }()
 
@@ -116,8 +131,37 @@ class DetailView: UIView {
         addSubview(totalStackView)
         
         totalStackView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(safeAreaLayoutGuide)
-            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(20)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.bottom.lessThanOrEqualTo(safeAreaLayoutGuide.snp.bottom).offset(-20)
+        }
+        
+        let safeAreaHeight = UIScreen.main.bounds.height - safeAreaInsets.top - safeAreaInsets.bottom - 40
+        
+        // titleImage와 contentText에 각각 30%의 높이 할당
+        titleImage.snp.makeConstraints { make in
+            make.height.equalTo(safeAreaHeight * 0.3)
+        }
+        
+        contentText.snp.makeConstraints { make in
+            make.height.equalTo(safeAreaHeight * 0.3)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(10)
+        }
+        
+        timeLabel.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(10)
+        }
+        
+        buttonStackView.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(10)
+        }
+        
+        addButton.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(10)
         }
     }
 }
