@@ -45,27 +45,39 @@ class HomeViewController: UIViewController {
     }
     
     private func setupDelegates() {
-        // 캘린더 델리게이트 설정
         homeView.calendarView.setDelegate(self)
-        
-        // 리스트뷰 델리게이트 설정
         homeView.toDoTableView.setDelegate(self)
     }
     
     private func setupBindings() {
         homeView.calendarView.didChangeHeight = { [weak self] newHeight in
-            self?.adjustTableViewPosition(for: newHeight)
+            guard let self = self else { return }
+            
+            self.adjustTableViewPosition(for: newHeight)
         }
         
         homeViewModel.navigateToDetailView = { [weak self] in
-            let detailViewController = DetailViewController()
-            self?.navigationController?.pushViewController(detailViewController, animated: true)
+            guard let self = self else { return }
+            
+            let detailViewController = DetailViewController(mode: .new
+                                                            , selectedDate: self.homeViewModel.getSelectedData())
+            self.navigationController?.pushViewController(detailViewController, animated: true)
+        }
+        
+        homeViewModel.cellToDetailView = { [weak self] toDoItem in
+            guard let self = self else { return }
+            
+            let detailViewController = DetailViewController(mode: .edit(toDoItem)
+                                                            , selectedDate: self.homeViewModel.getSelectedData())
+            self.navigationController?.pushViewController(detailViewController, animated: true)
         }
         
         homeViewModel.onDateUpdate = { [weak self] in
+            guard let self = self else { return }
+            print("onDateUpdate")
             DispatchQueue.main.async {
-                self?.updateFilteredToDoList()
-                self?.updateListView()
+                self.updateFilteredToDoList()
+                self.reloadData()
             }
         }
     }
@@ -101,6 +113,7 @@ class HomeViewController: UIViewController {
     
     private func reloadData() {
         homeView.calendarView.reloadData()
+        homeView.toDoTableView.reloadData()
     }
 }
 
@@ -163,6 +176,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        print("화면이동")
+        self.homeViewModel.toDoCellTapped(index: indexPath)
     }
 }
