@@ -93,7 +93,6 @@ class ToDoTableViewCell: UITableViewCell {
     func configure(with item: ToDoItem) {
         contentPreviewLabel.text = item.content
         
-        // 이미지 설정
         if let image = item.image {
             toDoImageView.image = image
             toDoImageView.tintColor = nil
@@ -102,8 +101,7 @@ class ToDoTableViewCell: UITableViewCell {
             toDoImageView.tintColor = .systemGray3
         }
         
-        // 날짜 및 시간 설정
-        dateTimeLabel.text = item.date.toString(format: "yyyy-MM-dd")
+        dateTimeLabel.text = item.date.toString()
     }
     
     override func prepareForReuse() {
