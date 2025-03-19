@@ -30,9 +30,7 @@ class HomeViewController: UIViewController {
         setupBindings()
         
         homeViewModel.loadData() { [weak self] in
-            self?.updateFilteredToDoList()
-            self?.updateListView()
-            self?.reloadData()
+            self?.refreshData()
         }
     }
     
@@ -51,33 +49,20 @@ class HomeViewController: UIViewController {
     
     private func setupBindings() {
         homeView.calendarView.didChangeHeight = { [weak self] newHeight in
-            guard let self = self else { return }
-            
-            self.adjustTableViewPosition(for: newHeight)
+            self?.adjustTableViewPosition(for: newHeight)
         }
         
         homeViewModel.navigateToDetailView = { [weak self] in
-            guard let self = self else { return }
-            
-            let detailViewController = DetailViewController(mode: .new
-                                                            , selectedDate: self.homeViewModel.getSelectedData())
-            self.navigationController?.pushViewController(detailViewController, animated: true)
+            self?.showDetailView(mode: .new)
         }
         
         homeViewModel.cellToDetailView = { [weak self] toDoItem in
-            guard let self = self else { return }
-            
-            let detailViewController = DetailViewController(mode: .edit(toDoItem)
-                                                            , selectedDate: self.homeViewModel.getSelectedData())
-            self.navigationController?.pushViewController(detailViewController, animated: true)
+            self?.showDetailView(mode: .edit(toDoItem))
         }
         
         homeViewModel.onDateUpdate = { [weak self] in
-            guard let self = self else { return }
-            print("onDateUpdate")
             DispatchQueue.main.async {
-                self.updateFilteredToDoList()
-                self.reloadData()
+                self?.refreshData()
             }
         }
     }
@@ -87,6 +72,14 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - Private Methods
+    private func showDetailView(mode: DetailViewModel.Mode) {
+        let detailViewController = DetailViewController(
+            mode: mode,
+            selectedDate: homeViewModel.getSelectedData()
+        )
+        navigationController?.pushViewController(detailViewController, animated: true)
+    }
+    
     private func adjustTableViewPosition(for newHeight: CGFloat) {
         // 캘린더 높이에 따라 테이블 뷰 위치 조정
         homeView.toDoTableView.snp.updateConstraints { make in
@@ -95,23 +88,18 @@ class HomeViewController: UIViewController {
         homeView.layoutIfNeeded() // 레이아웃 업데이트
     }
     
-    private func updateFilteredToDoList() {
-        // cachedFilteredToDoList = homeViewModel.getFilteredToDoList()
+    private func refreshData() {
         DispatchQueue.global(qos: .userInitiated).async {
             let filteredList = self.homeViewModel.getFilteredToDoList()
             DispatchQueue.main.async {
                 self.cachedFilteredToDoList = filteredList
-                self.updateListView()
+                self.updateUI()
             }
         }
     }
     
-    private func updateListView() {
+    private func updateUI() {
         homeView.toDoTableView.showEmptyState(cachedFilteredToDoList.isEmpty)
-        homeView.toDoTableView.reloadData()
-    }
-    
-    private func reloadData() {
         homeView.calendarView.reloadData()
         homeView.toDoTableView.reloadData()
     }
@@ -129,7 +117,7 @@ extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource {
         let hasEvent = homeViewModel.hasEvent(for: date)
         return hasEvent ? 1 : 0
     }
-
+    
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         UIView.animate(withDuration: 0.3) {
             // 새로 변경될 캘린더의 높이
