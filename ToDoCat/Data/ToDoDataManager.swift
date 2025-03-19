@@ -12,19 +12,47 @@ class ToDoDataManager {
     //MARK: - Singletone  패턴
     static let shared = ToDoDataManager()
     
+    private var notificationToken: NotificationToken?
+    var onDataChanged: (() -> Void)?
+    
     private init() {
         let realmConfig = Realm.Configuration(schemaVersion: 1)
         
         Realm.Configuration.defaultConfiguration = realmConfig
         
         print("realm 위치 \(Realm.Configuration.defaultConfiguration.fileURL!)")
+        setupObserver()
+    }
+    
+    deinit {
+        notificationToken?.invalidate()
+    }
+    
+    //MARK: - Realm Noti
+    private func setupObserver() {
+        do {
+            let realm = try Realm()
+            let results = realm.objects(ToDoItemRealm.self)
+            
+            notificationToken = results.observe { [weak self] changes in
+                switch changes {
+                case .initial, .update:
+                    self?.onDataChanged?()
+                case .error(let error):
+                    print("Error observing Realm Changes: \(error)")
+                }
+            }
+            
+        } catch {
+            print("Error setting up Realm observer: \(error)")
+        }
     }
     
     //MARK: - CRUD Methods
     func createToDo(todoItem: ToDoItem, isComplete: Bool = false) -> Bool {
-        let realm = try! Realm()
-        
         do {
+            let realm = try Realm()
+            
             let realmItem = ToDoItemRealm(toDoItem: todoItem)
             try realm.write {
                 realm.add(realmItem)
@@ -52,7 +80,7 @@ class ToDoDataManager {
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
         
         let realmItems = realm.objects(ToDoItemRealm.self)
-            .filter("createdAt >= %@ AND createdAt < %@", startOfDay, endOfDay)
+            .filter("date >= %@ AND date < %@", startOfDay, endOfDay)
         
         return realmItems.map { $0.toToDoItem() }
     }
@@ -60,7 +88,7 @@ class ToDoDataManager {
     func getAllToDos() -> [ToDoItem] {
         let realm = try! Realm()
         
-        let realmResults = realm.objects(ToDoItemRealm.self).sorted(byKeyPath: "createdAt", ascending: true)
+        let realmResults = realm.objects(ToDoItemRealm.self).sorted(byKeyPath: "date", ascending: true)
                 
         return realmResults.map { $0.toToDoItem() }
     }
@@ -132,7 +160,7 @@ class ToDoDataManager {
         let startOfDay = calendar.startOfDay(for: date)
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
         
-        let todosToDelete = realm.objects(ToDoItemRealm.self).filter("createdAt >= %@ AND createdAt < %@", startOfDay, endOfDay)
+        let todosToDelete = realm.objects(ToDoItemRealm.self).filter("date >= %@ AND date < %@", startOfDay, endOfDay)
         
         do {
             try realm.write {
