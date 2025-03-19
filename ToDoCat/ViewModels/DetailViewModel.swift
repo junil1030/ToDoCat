@@ -13,7 +13,7 @@ class DetailViewModel {
         case edit(ToDoItem)
     }
     
-    var mode: Mode
+    private var mode: Mode
     var selectedDate: Date
     
     var onDataUpdated: (() -> Void)?
@@ -36,7 +36,6 @@ class DetailViewModel {
         case .edit(let todoItem):
             self.content = todoItem.content
             self.titleImage = todoItem.image
-            print("edit Init Complete")
         }
         
         DispatchQueue.main.async { [weak self] in
