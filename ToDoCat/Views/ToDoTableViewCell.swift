@@ -103,7 +103,7 @@ class ToDoTableViewCell: UITableViewCell {
         }
         
         // 날짜 및 시간 설정
-        dateTimeLabel.text = item.createdAt.toString(format: "yyyy-MM-dd")
+        dateTimeLabel.text = item.date.toString(format: "yyyy-MM-dd")
     }
     
     override func prepareForReuse() {
