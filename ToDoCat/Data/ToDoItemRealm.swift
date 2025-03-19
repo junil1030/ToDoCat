@@ -14,6 +14,7 @@ class ToDoItemRealm: Object {
     @Persisted var content: String
     @Persisted var imageData: Data?
     @Persisted var isCompleted: Bool = false
+    @Persisted var date: Date
     @Persisted var createdAt: Date
     @Persisted var updatedAt: Date
     
@@ -29,6 +30,7 @@ class ToDoItemRealm: Object {
             self.imageData = image.jpegData(compressionQuality: 0.7)
         }
         self.isCompleted = toDoItem.isCompleted
+        self.date = toDoItem.date
         self.createdAt = toDoItem.createdAt
         self.updatedAt = toDoItem.updatedAt
     }
@@ -43,11 +45,15 @@ class ToDoItemRealm: Object {
         let updatedAtKST = Calendar.current.date(byAdding: .second
                                                  ,value: timezone.secondsFromGMT(for: updatedAt)
                                                  ,to: updatedAt)!
+        let dateAtKST = Calendar.current.date(byAdding: .second
+                                              ,value: timezone.secondsFromGMT(for: date)
+                                              ,to: date)!
         
         return ToDoItem(id: UUID(uuidString: id) ?? UUID()
                         , content: content
                         , image: image
                         , isCompleted: isCompleted
+                        , date: dateAtKST
                         , createdAt: createdAtKST
                         , updatedAt: updatedAtKST
         )
