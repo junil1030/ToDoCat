@@ -15,12 +15,24 @@ class HomeViewModel {
     private var hasToDoCache: Bool = false
     
     var navigateToDetailView: (() -> Void)?
+    var cellToDetailView: ((ToDoItem) -> Void)?
     var onDateUpdate: (() -> Void)?
     
     //MARK: - Methods
     init() {
         loadData {
             self.onDateUpdate?()
+        }
+        
+        setupBindings()
+    }
+    
+    func setupBindings() {
+        ToDoDataManager.shared.onDataChanged = { [weak self] in
+            guard let self = self else { return }
+            self.loadData {
+                self.onDateUpdate?()
+            }
         }
     }
     
@@ -51,15 +63,23 @@ class HomeViewModel {
         navigateToDetailView?()
     }
     
+    func toDoCellTapped(index: IndexPath) {
+        cellToDetailView?(filteredToDoList[index.row])
+    }
+    
     func hasEvent(for date: Date) -> Bool {
         let calendar = Calendar.current
         return allToDoList.contains {
-            return calendar.isDate($0.createdAt, inSameDayAs: date.toKST())
+            return calendar.isDate($0.date, inSameDayAs: date.toKST())
         }
     }
     
     func getFilteredToDoList() -> [ToDoItem] {
         return filteredToDoList
+    }
+    
+    func getSelectedData() -> Date {
+        return selectedDate
     }
     
     //MARK: - Private Methods
@@ -68,7 +88,7 @@ class HomeViewModel {
         let strippedSelectedDate = calendar.startOfDay(for: selectedDate)
         
         let newFilteredList = allToDoList.filter {
-            let strippedCreatedAt = calendar.startOfDay(for: $0.createdAt)
+            let strippedCreatedAt = calendar.startOfDay(for: $0.date)
             return strippedCreatedAt == strippedSelectedDate
         }
         
