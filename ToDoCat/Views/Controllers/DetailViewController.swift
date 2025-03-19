@@ -37,7 +37,20 @@ class DetailViewController: UIViewController {
             guard let self = self else { return }
             self.detailView.contentText.text = detailViewModel.content
             self.detailView.titleImage.image = detailViewModel.titleImage
-            self.detailView.timeLabel.text = detailViewModel.selectedDate.toKST().toString()
+            self.detailView.addButton.setTitle(detailViewModel.addButtonText, for: .normal)
+            
+            if let createdTime = detailViewModel.createdTime {
+                self.detailView.createdTimeLabel.text = "생성된 날짜 \(createdTime.toString(format: "yyyy-MM-dd HH:mm"))"
+            } else {
+                self.detailView.createdTimeLabel.text = "생성된 날짜 \(Date().toString(format: "yyyy-MM-dd HH:mm"))"
+            }
+            
+            if let updatedTime = detailViewModel.updatedTime {
+                self.detailView.updatedTimeLabel.text = "최근 수정된 날짜 \(updatedTime.toString(format: "yyyy-MM-dd HH:mm"))"
+            } else {
+                self.detailView.updatedTimeLabel.text = ""
+            }
+            
         }
         
         detailViewModel.onDataAdded = { [weak self] in
@@ -54,7 +67,10 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func addButtonTapped() {
-        detailViewModel.addEntry(newToDo: ToDoItem(
+        
+        // 신규 생성일 때, 업데이트일 때 구분하는 코드 추가예정
+        
+        detailViewModel.updateData(newToDo: ToDoItem(
             id: UUID()
             , content: detailView.contentText.text!
             , image: detailView.titleImage.image ?? nil
