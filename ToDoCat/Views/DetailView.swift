@@ -127,7 +127,7 @@ class DetailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupUI() {
+    private func setupUI() {
         addSubview(totalStackView)
         
         totalStackView.snp.makeConstraints { make in
