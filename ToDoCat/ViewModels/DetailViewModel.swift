@@ -22,7 +22,20 @@ class DetailViewModel {
     var content: String {
         didSet { onDataUpdated?() }
     }
+    
     var titleImage: UIImage? {
+        didSet { onDataUpdated?() }
+    }
+    
+    var addButtonText: String {
+        didSet { onDataUpdated?() }
+    }
+    
+    var createdTime: Date? {
+        didSet { onDataUpdated?() }
+    }
+    
+    var updatedTime: Date? {
         didSet { onDataUpdated?() }
     }
     
@@ -33,9 +46,16 @@ class DetailViewModel {
         case .new:
             self.content = "할 일을 입력해보세요 !!"
             self.titleImage = UIImage(systemName: "photo.badge.magnifyingglass")?.resized(to: CGSize(width: 40, height: 40))
+            self.addButtonText = "추가하기"
+            self.createdTime = nil
+            self.updatedTime = nil
+            
         case .edit(let todoItem):
             self.content = todoItem.content
             self.titleImage = todoItem.image
+            self.addButtonText = "저장하기"
+            self.createdTime = todoItem.createdAt
+            self.updatedTime = todoItem.updatedAt
         }
         
         DispatchQueue.main.async { [weak self] in
@@ -44,7 +64,7 @@ class DetailViewModel {
     }
     
     // 새 항목 추가 메서드
-    func addEntry(newToDo: ToDoItem) {
+    func updateData(newToDo: ToDoItem) {
         if ToDoDataManager.shared.createToDo(todoItem: newToDo) {
             print("저장 완료")
             onDataAdded?()
