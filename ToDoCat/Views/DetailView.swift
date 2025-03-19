@@ -19,10 +19,17 @@ class DetailView: UIView {
         return label
     }()
     
-    lazy var timeLabel: UILabel = {
+    lazy var createdTimeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.dohyeon(size: 14)
-        label.text = Date().toString(format: "yyyy-MM-dd")
+        label.textAlignment = .right
+        label.textColor = .gray
+        return label
+    }()
+    
+    lazy var updatedTimeLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.dohyeon(size: 14)
         label.textAlignment = .right
         label.textColor = .gray
         return label
@@ -110,7 +117,7 @@ class DetailView: UIView {
     }()
     
     lazy var totalStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, timeLabel, titleImage, buttonStackView, contentText, addButton])
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, createdTimeLabel, updatedTimeLabel, titleImage, buttonStackView, contentText, addButton])
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 10
@@ -152,8 +159,12 @@ class DetailView: UIView {
             make.height.greaterThanOrEqualTo(10)
         }
         
-        timeLabel.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(10)
+        createdTimeLabel.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(15)
+        }
+        
+        updatedTimeLabel.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(15)
         }
         
         buttonStackView.snp.makeConstraints { make in
