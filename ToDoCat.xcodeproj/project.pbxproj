@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0CEC90D4897A13088D2BC63E /* Pods_ToDoCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B175CC31787362EF9F43532 /* Pods_ToDoCat.framework */; };
 		F90796B92D84103D000D6136 /* BMDOHYEON.otf in Resources */ = {isa = PBXBuildFile; fileRef = F90796B82D84103D000D6136 /* BMDOHYEON.otf */; };
+		F9134EC72D8C01B60056CA2E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9134EC62D8C01B60056CA2E /* SearchView.swift */; };
+		F9134EC92D8C17DE0056CA2E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9134EC82D8C17DE0056CA2E /* SearchViewController.swift */; };
+		F9134ECB2D8C57650056CA2E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9134ECA2D8C575D0056CA2E /* SearchViewModel.swift */; };
 		F916B30B2D86CC25006C4EE9 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F916B30A2D86CC09006C4EE9 /* DetailViewModel.swift */; };
 		F9224C8A2D827A7F009E5220 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C892D827A7F009E5220 /* CalendarView.swift */; };
 		F9224C8C2D827D86009E5220 /* ToDoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */; };
@@ -38,6 +41,9 @@
 		2F509F292C34EBE734B1FB7B /* Pods-ToDoCat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoCat.debug.xcconfig"; path = "Target Support Files/Pods-ToDoCat/Pods-ToDoCat.debug.xcconfig"; sourceTree = "<group>"; };
 		C87F012325C11B6DE0F03D09 /* Pods-ToDoCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoCat.release.xcconfig"; path = "Target Support Files/Pods-ToDoCat/Pods-ToDoCat.release.xcconfig"; sourceTree = "<group>"; };
 		F90796B82D84103D000D6136 /* BMDOHYEON.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BMDOHYEON.otf; sourceTree = "<group>"; };
+		F9134EC62D8C01B60056CA2E /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		F9134EC82D8C17DE0056CA2E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		F9134ECA2D8C575D0056CA2E /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		F916B30A2D86CC09006C4EE9 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		F9224C892D827A7F009E5220 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableViewCell.swift; sourceTree = "<group>"; };
@@ -131,6 +137,7 @@
 		F94C5A402D81B54300BD8B70 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				F9134ECA2D8C575D0056CA2E /* SearchViewModel.swift */,
 				F916B30A2D86CC09006C4EE9 /* DetailViewModel.swift */,
 				F9224C932D82A8BA009E5220 /* HomeViewModel.swift */,
 			);
@@ -141,8 +148,9 @@
 			isa = PBXGroup;
 			children = (
 				F94C5A342D81B48000BD8B70 /* HomeViewController.swift */,
-				F94C5A482D81BDD600BD8B70 /* MainTabBarController.swift */,
+				F9134EC82D8C17DE0056CA2E /* SearchViewController.swift */,
 				F99B3E8E2D83F30900879AB0 /* DetailViewController.swift */,
+				F94C5A482D81BDD600BD8B70 /* MainTabBarController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -155,6 +163,7 @@
 				F9224C912D82A37D009E5220 /* ToDoTableView.swift */,
 				F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */,
 				F99B3E8C2D83EC2D00879AB0 /* DetailView.swift */,
+				F9134EC62D8C01B60056CA2E /* SearchView.swift */,
 				F94C5A422D81B55C00BD8B70 /* Controllers */,
 			);
 			path = Views;
@@ -332,8 +341,11 @@
 				F99B3E8B2D83D71600879AB0 /* Constants.swift in Sources */,
 				F9224C8C2D827D86009E5220 /* ToDoTableViewCell.swift in Sources */,
 				F94C5A3B2D81B48000BD8B70 /* AppDelegate.swift in Sources */,
+				F9134EC72D8C01B60056CA2E /* SearchView.swift in Sources */,
 				F9224C942D82A8C4009E5220 /* HomeViewModel.swift in Sources */,
+				F9134EC92D8C17DE0056CA2E /* SearchViewController.swift in Sources */,
 				F94C5A472D81BA1800BD8B70 /* HomeView.swift in Sources */,
+				F9134ECB2D8C57650056CA2E /* SearchViewModel.swift in Sources */,
 				F9F977A12D87F3CA006B79FE /* ToDoDataManager.swift in Sources */,
 				F9224C8A2D827A7F009E5220 /* CalendarView.swift in Sources */,
 				F94C5A492D81BDD600BD8B70 /* MainTabBarController.swift in Sources */,
