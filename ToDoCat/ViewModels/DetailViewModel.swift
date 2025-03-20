@@ -15,29 +15,16 @@ class DetailViewModel {
     
     private var mode: Mode
     var selectedDate: Date
+    var currentToDoItem: ToDoItem?
     
     var onDataUpdated: (() -> Void)?
     var onDataAdded: (() -> Void)?
     
-    var content: String {
-        didSet { onDataUpdated?() }
-    }
-    
-    var titleImage: UIImage? {
-        didSet { onDataUpdated?() }
-    }
-    
-    var addButtonText: String {
-        didSet { onDataUpdated?() }
-    }
-    
-    var createdTime: Date? {
-        didSet { onDataUpdated?() }
-    }
-    
-    var updatedTime: Date? {
-        didSet { onDataUpdated?() }
-    }
+    var content: String
+    var titleImage: UIImage?
+    var addButtonText: String
+    var createdTime: Date?
+    var updatedTime: Date?
     
     init(mode: Mode, selectedDate: Date) {
         self.mode = mode
@@ -51,6 +38,7 @@ class DetailViewModel {
             self.updatedTime = nil
             
         case .edit(let todoItem):
+            self.currentToDoItem = todoItem
             self.content = todoItem.content
             self.titleImage = todoItem.image
             self.addButtonText = "저장하기"
@@ -63,13 +51,27 @@ class DetailViewModel {
         }
     }
     
+    func getCurrentMode() -> Mode {
+        return mode
+    }
+    
     // 새 항목 추가 메서드
-    func updateData(newToDo: ToDoItem) {
+    func createData(newToDo: ToDoItem) {
         if ToDoDataManager.shared.createToDo(todoItem: newToDo) {
             print("저장 완료")
             onDataAdded?()
         } else {
-            fatalError("저장에 실패했습니다. 잠시후 다시 시도해주세요.")
+            fatalError("저장에 실패했습니다. 잠시 후 다시 시도해주세요.")
+        }
+    }
+    
+    func updateData(toDo: ToDoItem) {
+        print(toDo.content)
+        if ToDoDataManager.shared.updateToDo(id: toDo.id, content: toDo.content, image: toDo.image) {
+            print("저장 완료")
+            onDataAdded?()
+        } else {
+            fatalError("저장에 실패했습니다. 잠시 후 다시 시도해주세요.")
         }
     }
     
