@@ -67,18 +67,28 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func addButtonTapped() {
-        
-        // 신규 생성일 때, 업데이트일 때 구분하는 코드 추가예정
-        
-        detailViewModel.updateData(newToDo: ToDoItem(
-            id: UUID()
-            , content: detailView.contentText.text!
-            , image: detailView.titleImage.image ?? nil
-            , isCompleted: false
-            , date: detailViewModel.selectedDate
-            , createdAt: Date()
-            , updatedAt: Date())
-        )
+        let currentMode = detailViewModel.getCurrentMode()
+        switch currentMode {
+        case .new:
+            detailViewModel.createData(newToDo: ToDoItem(
+                id: UUID()
+                , content: detailView.contentText.text!
+                , image: detailView.titleImage.image ?? nil
+                , isCompleted: false
+                , date: detailViewModel.selectedDate
+                , createdAt: Date()
+                , updatedAt: Date())
+            )
+        case .edit:
+            detailViewModel.currentToDoItem?.content = detailView.contentText.text!
+            detailViewModel.currentToDoItem?.image = detailView.titleImage.image!
+            
+            guard let toDoItem = detailViewModel.currentToDoItem else {
+                print("저장할 데이터가 존재하지 않습니다.")
+                return
+            }
+            detailViewModel.updateData(toDo: toDoItem)
+        }
     }
     
     @objc private func getCatButtonTapped() {
