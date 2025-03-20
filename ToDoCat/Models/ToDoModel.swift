@@ -9,8 +9,8 @@ import UIKit
 
 struct ToDoItem: Equatable {
     let id: UUID
-    let content: String
-    let image: UIImage?
+    var content: String
+    var image: UIImage?
     var isCompleted: Bool = false
     var date: Date
     var createdAt: Date
