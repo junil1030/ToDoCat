@@ -85,6 +85,15 @@ class ToDoDataManager {
         return realmItems.map { $0.toToDoItem() }
     }
     
+    func searchToDos(keyword: String) -> [ToDoItem] {
+        let realm = try! Realm()
+        
+        let predicate = NSPredicate(format: "content CONTAINS[cd] %@", keyword)
+        let realmItems = realm.objects(ToDoItemRealm.self).filter(predicate)
+        
+        return realmItems.map { $0.toToDoItem() }
+    }
+    
     func getAllToDos() -> [ToDoItem] {
         let realm = try! Realm()
         
