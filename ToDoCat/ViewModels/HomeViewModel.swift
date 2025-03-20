@@ -78,7 +78,7 @@ class HomeViewModel {
         return filteredToDoList
     }
     
-    func getSelectedData() -> Date {
+    func getSelectedDate() -> Date {
         return selectedDate
     }
     

@@ -75,7 +75,7 @@ class HomeViewController: UIViewController {
     private func showDetailView(mode: DetailViewModel.Mode) {
         let detailViewController = DetailViewController(
             mode: mode,
-            selectedDate: homeViewModel.getSelectedData()
+            selectedDate: homeViewModel.getSelectedDate()
         )
         navigationController?.pushViewController(detailViewController, animated: true)
     }
