@@ -14,19 +14,25 @@ class DetailViewModel {
     }
     
     private var mode: Mode
+    private let imageService: ImageServiceProtocol
     var selectedDate: Date
     var currentToDoItem: ToDoItem?
     
+    var onImageChanged: ((UIImage?) -> Void)?
     var onDataUpdated: (() -> Void)?
     var onDataAdded: (() -> Void)?
     
     var content: String
-    var titleImage: UIImage?
+    var titleImage: UIImage? {
+        didSet {
+            onImageChanged?(titleImage)
+        }
+    }
     var addButtonText: String
     var createdTime: Date?
     var updatedTime: Date?
     
-    init(mode: Mode, selectedDate: Date) {
+    init(mode: Mode, selectedDate: Date, imageService: ImageServiceProtocol = ImageService()) {
         self.mode = mode
         self.selectedDate = selectedDate
         switch mode {
@@ -46,6 +52,8 @@ class DetailViewModel {
             self.updatedTime = todoItem.updatedAt
         }
         
+        self.imageService = imageService
+        
         DispatchQueue.main.async { [weak self] in
             self?.onDataUpdated?()
         }
@@ -56,7 +64,17 @@ class DetailViewModel {
     }
     
     // 새 항목 추가 메서드
-    func createData(newToDo: ToDoItem) {
+    func createData(content: String) {
+        let newToDo = ToDoItem(
+            id: UUID(),
+            content: content,
+            image: titleImage!,
+            isCompleted: false,
+            date: selectedDate,
+            createdAt: Date(),
+            updatedAt: Date()
+        )
+        
         if ToDoDataManager.shared.createToDo(todoItem: newToDo) {
             print("저장 완료")
             onDataAdded?()
@@ -65,9 +83,17 @@ class DetailViewModel {
         }
     }
     
-    func updateData(toDo: ToDoItem) {
-        print(toDo.content)
-        if ToDoDataManager.shared.updateToDo(id: toDo.id, content: toDo.content, image: toDo.image) {
+    func updateData(content: String) {
+        guard var toDoItem = currentToDoItem else {
+            print("저장할 데이터가 존재하지 않습니다.")
+            return
+        }
+        
+        toDoItem.content = content
+        toDoItem.image = titleImage
+        toDoItem.updatedAt = Date()
+        
+        if ToDoDataManager.shared.updateToDo(id: toDoItem.id, content: toDoItem.content, image: toDoItem.image) {
             print("저장 완료")
             onDataAdded?()
         } else {
@@ -75,12 +101,14 @@ class DetailViewModel {
         }
     }
     
-    // 샘플 이미지 생성 (실제 앱에서는 사용자가 제공하는 이미지 사용)
-    private func createSampleImage(withColor color: UIColor) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 60, height: 60))
-        return renderer.image { ctx in
-            color.setFill()
-            ctx.fill(CGRect(x: 0, y: 0, width: 60, height: 60))
+    func addImage(imageUrl: String) {
+        imageService.getImage(from: imageUrl) { [weak self] result in
+            switch result {
+            case .success(let image):
+                self?.titleImage = image
+            case .failure(let error):
+                print("이미지 로드 실패: \(error)")
+            }
         }
     }
 }
