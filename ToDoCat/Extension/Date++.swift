@@ -23,6 +23,8 @@ extension Date {
     }
 
     func toKST() -> Date {
-        return Calendar.current.date(byAdding: .second,value: Common.korTimeZone.secondsFromGMT(for: self), to: self)!
+        return Calendar.current.date(byAdding: .second
+                                     ,value: TimeZone(identifier: "Asia/Seoul")!.secondsFromGMT(for: self)
+                                     , to: self)!
     }
 }
