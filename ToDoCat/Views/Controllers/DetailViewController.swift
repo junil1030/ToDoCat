@@ -24,10 +24,10 @@ class DetailViewController: UIViewController {
     override func loadView() {
         view = detailView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupBindings()
         setupActions()
     }
@@ -57,6 +57,12 @@ class DetailViewController: UIViewController {
             // 토스트 메세지 띄워보는 거?
             self?.navigationController?.popViewController(animated: true)
         }
+        
+        detailViewModel.onImageChanged = { [weak self] image in
+            DispatchQueue.main.async {
+                self?.detailView.titleImage.image = image
+            }
+        }
     }
     
     private func setupActions() {
@@ -68,31 +74,20 @@ class DetailViewController: UIViewController {
     
     @objc private func addButtonTapped() {
         let currentMode = detailViewModel.getCurrentMode()
+        
+        let content = detailView.contentText.text ?? ""
+        let image = detailView.titleImage.image
+        
         switch currentMode {
         case .new:
-            detailViewModel.createData(newToDo: ToDoItem(
-                id: UUID()
-                , content: detailView.contentText.text!
-                , image: detailView.titleImage.image ?? nil
-                , isCompleted: false
-                , date: detailViewModel.selectedDate
-                , createdAt: Date()
-                , updatedAt: Date())
-            )
+            detailViewModel.createData(content: content)
         case .edit:
-            detailViewModel.currentToDoItem?.content = detailView.contentText.text!
-            detailViewModel.currentToDoItem?.image = detailView.titleImage.image!
-            
-            guard let toDoItem = detailViewModel.currentToDoItem else {
-                print("저장할 데이터가 존재하지 않습니다.")
-                return
-            }
-            detailViewModel.updateData(toDo: toDoItem)
+            detailViewModel.updateData(content: content)
         }
     }
     
     @objc private func getCatButtonTapped() {
-        print("고양이 버튼 눌림")
+        detailViewModel.addImage(imageUrl: Constants.getCatImageUrl(says: nil))
     }
     
     @objc private func getDogButtonTapped() {
