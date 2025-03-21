@@ -6,8 +6,14 @@
 //
 import UIKit
 
-struct Common {
+struct Constants {
     static var engTitle: String = "ToDoCat"
     static var korTitle: String = "매일할고양"
-    static var korTimeZone: TimeZone = TimeZone(identifier: "Asia/Seoul")!
+    
+    static func getCatImageUrl(says: String?) -> String {
+        guard let says = says else {
+            return "https://cataas.com/cat?width=400&height=400"
+        }
+        return "https://cataas.com/cat/says/\(says)?width=400&height=400"
+    }
 }
