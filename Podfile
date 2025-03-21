@@ -9,4 +9,5 @@ target 'ToDoCat' do
     pod 'RealmSwift'
     pod 'IQKeyboardManagerSwift'
     pod 'FSCalendar'
+    pod 'Alamofire'
 end
