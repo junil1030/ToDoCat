@@ -29,6 +29,8 @@ class HomeViewController: UIViewController {
         setupDelegates()
         setupBindings()
         
+        homeView.calendarView.selectDate(Date())
+        
         homeViewModel.loadData() { [weak self] in
             self?.refreshData()
         }
@@ -102,6 +104,8 @@ class HomeViewController: UIViewController {
         homeView.toDoTableView.showEmptyState(cachedFilteredToDoList.isEmpty)
         homeView.calendarView.reloadData()
         homeView.toDoTableView.reloadData()
+        
+        homeViewModel.updateSelectedDate(homeViewModel.getSelectedDate())
     }
 }
 
@@ -167,3 +171,4 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         self.homeViewModel.toDoCellTapped(index: indexPath)
     }
 }
+
