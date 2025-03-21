@@ -18,7 +18,7 @@ protocol ImageServiceProtocol {
 class ImageService: ImageServiceProtocol {
     private let repository: ImageRepositoryProtocol
     
-    init(repository: ImageRepositoryProtocol) {
+    init(repository: ImageRepositoryProtocol = ImageRepository()) {
         self.repository = repository
     }
     
