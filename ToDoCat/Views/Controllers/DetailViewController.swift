@@ -76,7 +76,6 @@ class DetailViewController: UIViewController {
         let currentMode = detailViewModel.getCurrentMode()
         
         let content = detailView.contentText.text ?? ""
-        let image = detailView.titleImage.image
         
         switch currentMode {
         case .new:
