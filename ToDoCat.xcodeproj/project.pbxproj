@@ -207,8 +207,8 @@
 				F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */,
 				F99B3E8C2D83EC2D00879AB0 /* DetailView.swift */,
 				F9134EC62D8C01B60056CA2E /* SearchView.swift */,
-				F94C5A422D81B55C00BD8B70 /* Controllers */,
 				F9D71D462D8E8D9700B74D0D /* SetUpView.swift */,
+				F94C5A422D81B55C00BD8B70 /* Controllers */,
 			);
 			path = Views;
 			sourceTree = "<group>";
