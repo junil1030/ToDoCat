@@ -24,7 +24,7 @@ class ToDoTableViewCell: UITableViewCell {
     private let dateTimeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.dohyeon(size: 12)
-        label.textColor = .gray
+        label.textColor = UIColor(named: "TextColor")
         label.textAlignment = .left
         return label
     }()
@@ -32,7 +32,7 @@ class ToDoTableViewCell: UITableViewCell {
     private let contentPreviewLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.dohyeon(size: 14)
-        label.textColor = .darkGray
+        label.textColor = UIColor(named: "TextColor")
         label.numberOfLines = 2  // 최대 2줄로 제한
         return label
     }()
@@ -67,6 +67,7 @@ class ToDoTableViewCell: UITableViewCell {
 
     private func setupCell() {
         self.selectionStyle = .none
+        backgroundColor = UIColor(named: "CellBackgroundColor")
         
         contentView.addSubview(containerStackView)
         

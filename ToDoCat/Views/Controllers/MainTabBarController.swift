@@ -12,9 +12,14 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupColors()
         setupTabs()
     }
     
+    func setupColors() {
+        self.tabBar.tintColor = UIColor(named: "CalendarColor")
+        self.navigationController?.navigationBar.barTintColor = UIColor(named: "CalendarColor")
+    }
     
     func setupTabs() {
         let homeVC = HomeViewController()

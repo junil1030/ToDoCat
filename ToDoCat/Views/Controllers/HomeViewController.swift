@@ -37,11 +37,13 @@ class HomeViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+        let rigthButton = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
             action: #selector(addNewEntry)
         )
+        navigationItem.rightBarButtonItem = rigthButton
+        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CalendarColor")
     }
     
     private func setupDelegates() {
@@ -110,7 +112,7 @@ class HomeViewController: UIViewController {
 }
 
 //MARK: - FSCalendar Delegate & DataSource
-extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource {
+extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         homeViewModel.updateSelectedDate(date)

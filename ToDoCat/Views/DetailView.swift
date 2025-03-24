@@ -15,7 +15,7 @@ class DetailView: UIView {
         label.font = UIFont.dohyeon(size: 16)
         label.textAlignment = .center
         label.text = "To Do"
-        label.textColor = .black
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
@@ -23,7 +23,7 @@ class DetailView: UIView {
         let label = UILabel()
         label.font = UIFont.dohyeon(size: 14)
         label.textAlignment = .right
-        label.textColor = .gray
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
@@ -31,7 +31,7 @@ class DetailView: UIView {
         let label = UILabel()
         label.font = UIFont.dohyeon(size: 14)
         label.textAlignment = .right
-        label.textColor = .gray
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
@@ -45,8 +45,8 @@ class DetailView: UIView {
         let button = UIButton()
         button.titleLabel?.font = UIFont.dohyeon(size: 10)
         button.setTitle("고양이 만나기", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitleColor(UIColor(named: "CalendarSelectColor"), for: .normal)
+        button.backgroundColor = UIColor(named: "CalendarColor")
         button.layer.cornerRadius = 10
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.white.cgColor
@@ -58,8 +58,8 @@ class DetailView: UIView {
         let button = UIButton()
         button.titleLabel?.font = UIFont.dohyeon(size: 10)
         button.setTitle("기본 이미지 불러오기", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitleColor(UIColor(named: "CalendarSelectColor"), for: .normal)
+        button.backgroundColor = UIColor(named: "CalendarColor")
         button.layer.cornerRadius = 10
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.white.cgColor
@@ -71,8 +71,8 @@ class DetailView: UIView {
         let button = UIButton()
         button.titleLabel?.font = UIFont.dohyeon(size: 10)
         button.setTitle("내 사진 추가", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitleColor(UIColor(named: "CalendarSelectColor"), for: .normal)
+        button.backgroundColor = UIColor(named: "CalendarColor")
         button.layer.cornerRadius = 10
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.white.cgColor
@@ -92,9 +92,9 @@ class DetailView: UIView {
     
     lazy var contentText: UITextView = {
         let textView = UITextView()
-        textView.text = "할 일을 입력해보세요"
         textView.font = UIFont.dohyeon(size: 12)
-        textView.textColor = .black
+        textView.backgroundColor = .darkGray
+        textView.textColor = UIColor(named: "CalendarSelectColor")
         textView.layer.cornerRadius = 8
         textView.layer.masksToBounds = true
         textView.layer.borderWidth = 1
@@ -107,8 +107,8 @@ class DetailView: UIView {
         let button = UIButton()
         button.titleLabel?.font = UIFont.dohyeon(size: 14)
         button.setTitle("할 일 추가", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitleColor(UIColor(named: "CalendarSelectColor"), for: .normal)
+        button.backgroundColor = UIColor(named: "CalendarColor")
         button.layer.cornerRadius = 10
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.white.cgColor
@@ -136,6 +136,8 @@ class DetailView: UIView {
     
     private func setupUI() {
         addSubview(totalStackView)
+        
+        backgroundColor = UIColor(named: "BackgroundColor")
         
         totalStackView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(20)

@@ -13,12 +13,14 @@ class CalendarView: UIView {
     
     private lazy var calendarView: FSCalendar = {
         let calendar = FSCalendar()
-        calendar.appearance.headerTitleColor = .black
-        calendar.appearance.weekdayTextColor = .gray
-        calendar.appearance.titleDefaultColor = .black
-        calendar.appearance.selectionColor = .systemBlue
-        calendar.appearance.todayColor = .systemBlue.withAlphaComponent(0.3)
-        calendar.appearance.todaySelectionColor = .systemBlue
+        calendar.appearance.headerTitleColor = UIColor(named: "TextColor")
+        calendar.appearance.weekdayTextColor = UIColor(named: "TextColor")
+        calendar.appearance.titleDefaultColor = UIColor(named: "TextColor")
+        calendar.appearance.selectionColor = UIColor(named: "CalendarColor")
+        calendar.appearance.todayColor = UIColor(named: "CalendarColor")!.withAlphaComponent(0.3)
+        calendar.appearance.todaySelectionColor = UIColor(named: "CalendarColor")
+        calendar.appearance.eventDefaultColor = UIColor(named: "CalendarColor")
+        calendar.appearance.eventSelectionColor = UIColor(named: "CalendarColor")
         calendar.appearance.headerDateFormat = "yyyy년 MM월"
         calendar.appearance.headerTitleFont = UIFont.dohyeon(size: 16)
         calendar.appearance.titleFont = UIFont.dohyeon(size: 14)
@@ -49,7 +51,7 @@ class CalendarView: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "BackgroundColor")
         
         addSubview(calendarView)
         

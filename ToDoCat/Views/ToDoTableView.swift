@@ -11,7 +11,7 @@ class ToDoTableView: UIView {
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = UIColor(named: "BackgroundColor")
         tableView.separatorStyle = .singleLine
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 80
@@ -23,7 +23,7 @@ class ToDoTableView: UIView {
         let label = UILabel()
         label.text = "할 일을 추가해보세요!"
         label.textAlignment = .center
-        label.textColor = .gray
+        label.textColor = UIColor(named: "TextColor")
         label.isHidden = true
         return label
     }()
@@ -39,7 +39,7 @@ class ToDoTableView: UIView {
     }
     
     func setupView() {
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "BackgroundColor")
         
         addSubview(tableView)
         addSubview(emptyStateLabel)

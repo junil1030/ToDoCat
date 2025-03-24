@@ -19,7 +19,7 @@ class SearchView: UIView {
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = UIColor(named: "BackgroundColor")
         tableView.separatorStyle = .singleLine
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 80
@@ -38,7 +38,7 @@ class SearchView: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "BackgroundColor")
         
         addSubview(searchBar)
         addSubview(tableView)

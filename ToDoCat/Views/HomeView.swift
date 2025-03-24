@@ -23,7 +23,7 @@ class HomeView: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "BackgroundColor")
         
         addSubview(calendarView)
         addSubview(toDoTableView)
