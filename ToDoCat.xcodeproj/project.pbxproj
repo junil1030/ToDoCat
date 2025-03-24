@@ -21,6 +21,10 @@
 		F92834BD2D8D5998001B0EA7 /* ImageEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92834BC2D8D5990001B0EA7 /* ImageEntity.swift */; };
 		F92834BF2D8D5A27001B0EA7 /* ImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92834BE2D8D5A1A001B0EA7 /* ImageRepository.swift */; };
 		F92834C12D8D5BB2001B0EA7 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92834C02D8D5BAD001B0EA7 /* ImageService.swift */; };
+		F94655CC2D912424007EE286 /* SettingsOptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94655CB2D91241B007EE286 /* SettingsOptionModel.swift */; };
+		F94655CE2D912456007EE286 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94655CD2D91244D007EE286 /* SettingsViewModel.swift */; };
+		F94655D02D912557007EE286 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94655CF2D912557007EE286 /* SettingsViewController.swift */; };
+		F94655D22D912DFD007EE286 /* Pods-ToDoCat-acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = F94655D12D912DFD007EE286 /* Pods-ToDoCat-acknowledgements.plist */; };
 		F94C5A372D81B48000BD8B70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F94C5A2C2D81B48000BD8B70 /* Assets.xcassets */; };
 		F94C5A392D81B48000BD8B70 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F94C5A2F2D81B48000BD8B70 /* LaunchScreen.storyboard */; };
 		F94C5A3B2D81B48000BD8B70 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C5A2B2D81B48000BD8B70 /* AppDelegate.swift */; };
@@ -32,7 +36,7 @@
 		F99B3E8D2D83EC2D00879AB0 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B3E8C2D83EC2D00879AB0 /* DetailView.swift */; };
 		F99B3E8F2D83F30900879AB0 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B3E8E2D83F30900879AB0 /* DetailViewController.swift */; };
 		F99B3E982D83F82300879AB0 /* UIFont++.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B3E962D83F82300879AB0 /* UIFont++.swift */; };
-		F9D71D472D8E8D9700B74D0D /* SetUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D71D462D8E8D9700B74D0D /* SetUpView.swift */; };
+		F9D71D472D8E8D9700B74D0D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D71D462D8E8D9700B74D0D /* SettingsView.swift */; };
 		F9F9779F2D87F212006B79FE /* ToDoItemRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F9779E2D87F207006B79FE /* ToDoItemRealm.swift */; };
 		F9F977A12D87F3CA006B79FE /* ToDoDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F977A02D87F3C5006B79FE /* ToDoDataManager.swift */; };
 		F9F977A32D8811F7006B79FE /* Date++.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F977A22D8811F2006B79FE /* Date++.swift */; };
@@ -57,6 +61,10 @@
 		F92834BC2D8D5990001B0EA7 /* ImageEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEntity.swift; sourceTree = "<group>"; };
 		F92834BE2D8D5A1A001B0EA7 /* ImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRepository.swift; sourceTree = "<group>"; };
 		F92834C02D8D5BAD001B0EA7 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
+		F94655CB2D91241B007EE286 /* SettingsOptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOptionModel.swift; sourceTree = "<group>"; };
+		F94655CD2D91244D007EE286 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		F94655CF2D912557007EE286 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		F94655D12D912DFD007EE286 /* Pods-ToDoCat-acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Pods-ToDoCat-acknowledgements.plist"; sourceTree = "<group>"; };
 		F94C5A2B2D81B48000BD8B70 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F94C5A2C2D81B48000BD8B70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F94C5A2D2D81B48000BD8B70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -70,7 +78,7 @@
 		F99B3E8C2D83EC2D00879AB0 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		F99B3E8E2D83F30900879AB0 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		F99B3E962D83F82300879AB0 /* UIFont++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont++.swift"; sourceTree = "<group>"; };
-		F9D71D462D8E8D9700B74D0D /* SetUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpView.swift; sourceTree = "<group>"; };
+		F9D71D462D8E8D9700B74D0D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F9F9779E2D87F207006B79FE /* ToDoItemRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemRealm.swift; sourceTree = "<group>"; };
 		F9F977A02D87F3C5006B79FE /* ToDoDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoDataManager.swift; sourceTree = "<group>"; };
 		F9F977A22D8811F2006B79FE /* Date++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date++.swift"; sourceTree = "<group>"; };
@@ -162,6 +170,7 @@
 				F92834B82D8D592B001B0EA7 /* Network */,
 				F9F9779D2D87F1E2006B79FE /* Data */,
 				F94C5A2C2D81B48000BD8B70 /* Assets.xcassets */,
+				F94655D12D912DFD007EE286 /* Pods-ToDoCat-acknowledgements.plist */,
 				F94C5A2D2D81B48000BD8B70 /* Info.plist */,
 				F90796B52D840DA0000D6136 /* fonts */,
 				F94C5A2F2D81B48000BD8B70 /* LaunchScreen.storyboard */,
@@ -172,6 +181,7 @@
 		F94C5A3F2D81B53300BD8B70 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F94655CB2D91241B007EE286 /* SettingsOptionModel.swift */,
 				F9224C8D2D82960F009E5220 /* ToDoModel.swift */,
 			);
 			path = Models;
@@ -180,6 +190,7 @@
 		F94C5A402D81B54300BD8B70 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				F94655CD2D91244D007EE286 /* SettingsViewModel.swift */,
 				F9134ECA2D8C575D0056CA2E /* SearchViewModel.swift */,
 				F916B30A2D86CC09006C4EE9 /* DetailViewModel.swift */,
 				F9224C932D82A8BA009E5220 /* HomeViewModel.swift */,
@@ -194,6 +205,7 @@
 				F9134EC82D8C17DE0056CA2E /* SearchViewController.swift */,
 				F99B3E8E2D83F30900879AB0 /* DetailViewController.swift */,
 				F94C5A482D81BDD600BD8B70 /* MainTabBarController.swift */,
+				F94655CF2D912557007EE286 /* SettingsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -207,7 +219,7 @@
 				F9224C8B2D827D86009E5220 /* ToDoTableViewCell.swift */,
 				F99B3E8C2D83EC2D00879AB0 /* DetailView.swift */,
 				F9134EC62D8C01B60056CA2E /* SearchView.swift */,
-				F9D71D462D8E8D9700B74D0D /* SetUpView.swift */,
+				F9D71D462D8E8D9700B74D0D /* SettingsView.swift */,
 				F94C5A422D81B55C00BD8B70 /* Controllers */,
 			);
 			path = Views;
@@ -322,6 +334,7 @@
 			files = (
 				F94C5A372D81B48000BD8B70 /* Assets.xcassets in Resources */,
 				F90796B92D84103D000D6136 /* BMDOHYEON.otf in Resources */,
+				F94655D22D912DFD007EE286 /* Pods-ToDoCat-acknowledgements.plist in Resources */,
 				F94C5A392D81B48000BD8B70 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -384,18 +397,21 @@
 				F9F977A32D8811F7006B79FE /* Date++.swift in Sources */,
 				F99B3E8B2D83D71600879AB0 /* Constants.swift in Sources */,
 				F9224C8C2D827D86009E5220 /* ToDoTableViewCell.swift in Sources */,
-				F9D71D472D8E8D9700B74D0D /* SetUpView.swift in Sources */,
+				F9D71D472D8E8D9700B74D0D /* SettingsView.swift in Sources */,
 				F94C5A3B2D81B48000BD8B70 /* AppDelegate.swift in Sources */,
 				F9134EC72D8C01B60056CA2E /* SearchView.swift in Sources */,
 				F9224C942D82A8C4009E5220 /* HomeViewModel.swift in Sources */,
+				F94655CC2D912424007EE286 /* SettingsOptionModel.swift in Sources */,
 				F92834BF2D8D5A27001B0EA7 /* ImageRepository.swift in Sources */,
 				F92834BD2D8D5998001B0EA7 /* ImageEntity.swift in Sources */,
+				F94655CE2D912456007EE286 /* SettingsViewModel.swift in Sources */,
 				F9134EC92D8C17DE0056CA2E /* SearchViewController.swift in Sources */,
 				F94C5A472D81BA1800BD8B70 /* HomeView.swift in Sources */,
 				F9134ECB2D8C57650056CA2E /* SearchViewModel.swift in Sources */,
 				F9F977A12D87F3CA006B79FE /* ToDoDataManager.swift in Sources */,
 				F9224C8A2D827A7F009E5220 /* CalendarView.swift in Sources */,
 				F94C5A492D81BDD600BD8B70 /* MainTabBarController.swift in Sources */,
+				F94655D02D912557007EE286 /* SettingsViewController.swift in Sources */,
 				F94C5A3C2D81B48000BD8B70 /* SceneDelegate.swift in Sources */,
 				F92834C12D8D5BB2001B0EA7 /* ImageService.swift in Sources */,
 				F94C5A3E2D81B48000BD8B70 /* HomeViewController.swift in Sources */,
@@ -426,7 +442,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = MWBS4R8DBQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToDoCat/Info.plist;
@@ -439,7 +455,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.junil.ToDoCat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -459,7 +475,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = MWBS4R8DBQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToDoCat/Info.plist;
@@ -472,7 +488,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.junil.ToDoCat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

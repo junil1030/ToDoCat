@@ -11,4 +11,5 @@ target 'ToDoCat' do
     pod 'FSCalendar'
     pod 'Alamofire'
     pod 'AcknowList'
+    pod 'Toast-Swift', '~> 5.1.1'
 end

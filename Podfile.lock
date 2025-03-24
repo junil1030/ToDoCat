@@ -48,6 +48,7 @@ PODS:
   - RealmSwift (20.0.1):
     - Realm (= 20.0.1)
   - SnapKit (5.7.1)
+  - Toast-Swift (5.1.1)
 
 DEPENDENCIES:
   - AcknowList
@@ -56,6 +57,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - RealmSwift
   - SnapKit (~> 5.7.0)
+  - Toast-Swift (~> 5.1.1)
 
 SPEC REPOS:
   trunk:
@@ -73,6 +75,7 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - SnapKit
+    - Toast-Swift
 
 SPEC CHECKSUMS:
   AcknowList: ba1fa5ec5f36188c49ec26cf27a95e0a4f448b96
@@ -89,7 +92,8 @@ SPEC CHECKSUMS:
   Realm: 9572204903ef28caeb3c03bb30c1147f354ee3e7
   RealmSwift: d230b44017a55a1ba97de6a944da1fe3bedb92b5
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  Toast-Swift: 7a03a532afe3a560d4044bc7c237e2864d295173
 
-PODFILE CHECKSUM: dc05188e008bfcc6944a8acb436e042ad1022000
+PODFILE CHECKSUM: 1085d1759c819dfd80fd9df65c1df54cb8390019
 
 COCOAPODS: 1.16.2
