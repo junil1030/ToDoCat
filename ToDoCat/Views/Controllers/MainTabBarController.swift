@@ -25,7 +25,11 @@ class MainTabBarController: UITabBarController {
         let searchNav = UINavigationController(rootViewController: searchVC)
         searchNav.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         
-        viewControllers = [homeNav, searchNav]
+        let settingsVC = SettingsViewController()
+        let settingsNav = UINavigationController(rootViewController: settingsVC)
+        settingsNav.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "gearshape"), tag: 2)
+        
+        viewControllers = [homeNav, searchNav, settingsNav]
     }
     
 }
