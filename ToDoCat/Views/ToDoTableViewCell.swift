@@ -18,9 +18,6 @@ class ToDoTableViewCell: UITableViewCell {
         imageView.clipsToBounds = true
         imageView.backgroundColor = .systemGray5
         imageView.layer.cornerRadius = 8
-        // 기본 이미지 설정 (옵션)
-        imageView.image = UIImage(systemName: "photo")
-        imageView.tintColor = .systemGray3
         return imageView
     }()
     
