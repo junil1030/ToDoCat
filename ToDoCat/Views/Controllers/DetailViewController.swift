@@ -4,8 +4,8 @@
 //
 //  Created by 서준일 on 3/14/25.
 //
-
 import UIKit
+import PhotosUI
 
 class DetailViewController: UIViewController {
     
@@ -68,7 +68,7 @@ class DetailViewController: UIViewController {
     private func setupActions() {
         detailView.addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         detailView.getCatButton.addTarget(self, action: #selector(getCatButtonTapped), for: .touchUpInside)
-        detailView.getDogButton.addTarget(self, action: #selector(getDogButtonTapped), for: .touchUpInside)
+        detailView.getDefaultImageButton.addTarget(self, action: #selector(getDefaultImageButtonTapped), for: .touchUpInside)
         detailView.getCustomImageButton.addTarget(self, action: #selector(getCustomImageButtonTapped), for: .touchUpInside)
     }
     
@@ -86,14 +86,51 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func getCatButtonTapped() {
-        detailViewModel.addImage(imageUrl: Constants.getCatImageUrl(says: nil))
+        self.view.makeToastActivity(.center)
+        
+        detailViewModel.addImage(imageUrl: Constants.getCatImageUrl(says: nil)) { [weak self] success in
+            DispatchQueue.main.async {
+                self?.view.hideToastActivity()
+                if success {
+                    
+                } else {
+                    self?.showToast(message: "이미지를 불러오지 못했습니다.")
+                }
+            }
+        }
     }
     
-    @objc private func getDogButtonTapped() {
-        print("강아지 버튼 눌림")
+    @objc private func getDefaultImageButtonTapped() {
+        detailViewModel.titleImage = UIImage(named: "DefaultImage")
     }
     
     @objc private func getCustomImageButtonTapped() {
-        print("커스텀 이미지 버튼 눌림")
+        var config = PHPickerConfiguration()
+        config.selectionLimit = 1
+        config.filter = .images
+        
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    func showToast(message: String) {
+        self.view.makeToast("\(message)", duration: 2.0, position: .bottom)
     }
 }
+
+extension DetailViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        guard let provider = results.first?.itemProvider else { return }
+        if provider.canLoadObject(ofClass: UIImage.self) {
+            provider.loadObject(ofClass: UIImage.self) { (image, error) in
+                if let selectImage = image as? UIImage {
+                    self.detailViewModel.titleImage = selectImage
+                }
+            }
+        }
+    }
+}
+
