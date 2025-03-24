@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SetUpView: UIView {
+class SettingsView: UIView {
     
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)

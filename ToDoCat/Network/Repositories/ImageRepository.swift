@@ -6,6 +6,7 @@
 //
 import Foundation
 import Alamofire
+import Toast_Swift
 
 protocol ImageRepositoryProtocol {
     func fetchImage(from url: URL, completion: @escaping (Result<ImageEntity, Error>) -> Void)
