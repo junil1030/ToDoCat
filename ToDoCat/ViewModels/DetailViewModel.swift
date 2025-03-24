@@ -38,7 +38,7 @@ class DetailViewModel {
         switch mode {
         case .new:
             self.content = "할 일을 입력해보세요 !!"
-            self.titleImage = UIImage(systemName: "photo.badge.magnifyingglass")?.resized(to: CGSize(width: 40, height: 40))
+            self.titleImage = UIImage(named: "DefaultImage")?.resized(to: CGSize(width: 40, height: 40))
             self.addButtonText = "추가하기"
             self.createdTime = nil
             self.updatedTime = nil
@@ -101,13 +101,15 @@ class DetailViewModel {
         }
     }
     
-    func addImage(imageUrl: String) {
+    func addImage(imageUrl: String, completion: @escaping (Bool) -> Void) {
         imageService.getImage(from: imageUrl) { [weak self] result in
             switch result {
             case .success(let image):
                 self?.titleImage = image
+                completion(true)
             case .failure(let error):
                 print("이미지 로드 실패: \(error)")
+                completion(false)
             }
         }
     }
