@@ -54,10 +54,10 @@ class DetailView: UIView {
         return button
     }()
     
-    lazy var getDogButton: UIButton = {
+    lazy var getDefaultImageButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = UIFont.dohyeon(size: 10)
-        button.setTitle("강아지 만나기", for: .normal)
+        button.setTitle("기본 이미지 불러오기", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
@@ -81,7 +81,7 @@ class DetailView: UIView {
     }()
     
     lazy var buttonStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [getCatButton, getDogButton, getCustomImageButton])
+        let stackView = UIStackView(arrangedSubviews: [getCatButton, getCustomImageButton, getDefaultImageButton])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 10
@@ -172,7 +172,7 @@ class DetailView: UIView {
         }
         
         addButton.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(10)
+            make.height.greaterThanOrEqualTo(20)
         }
     }
 }
