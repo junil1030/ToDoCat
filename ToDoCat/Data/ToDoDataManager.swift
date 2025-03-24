@@ -162,14 +162,10 @@ class ToDoDataManager {
         }
     }
     
-    func deleteToDos(forDate date: Date) -> Bool {
+    func deleteToDoAll() -> Bool {
         let realm = try! Realm()
         
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date)
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-        
-        let todosToDelete = realm.objects(ToDoItemRealm.self).filter("date >= %@ AND date < %@", startOfDay, endOfDay)
+        let todosToDelete = realm.objects(ToDoItemRealm.self)
         
         do {
             try realm.write {
