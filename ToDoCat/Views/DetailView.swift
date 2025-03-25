@@ -93,8 +93,8 @@ class DetailView: UIView {
     lazy var contentText: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.dohyeon(size: 12)
-        textView.backgroundColor = .darkGray
-        textView.textColor = UIColor(named: "CalendarSelectColor")
+        textView.backgroundColor = UIColor(named: "BackgroundColor")
+        textView.textColor = UIColor(named: "TextColor")
         textView.layer.cornerRadius = 8
         textView.layer.masksToBounds = true
         textView.layer.borderWidth = 1
