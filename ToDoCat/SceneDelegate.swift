@@ -11,7 +11,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
@@ -19,12 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window?.rootViewController = MainTabBarController()
         window?.makeKeyAndVisible()
-        
-//        for fontFamily in UIFont.familyNames {
-//            for fontName in UIFont.fontNames(forFamilyName: fontFamily) {
-//                print(fontName)
-//            }
-//        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
