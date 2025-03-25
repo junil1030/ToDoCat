@@ -12,13 +12,32 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupAppearance()
         setupColors()
         setupTabs()
     }
     
+    func setupAppearance() {
+        // 탭 바 외관 설정
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithDefaultBackground()
+        tabBarAppearance.backgroundColor = UIColor(named: "CalenderBackgroundColor")
+        
+        tabBar.standardAppearance = tabBarAppearance
+        tabBar.scrollEdgeAppearance = tabBarAppearance
+        
+        // 네비게이션 바 외관 설정
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = UIColor(named: "CalenderBackgroundColor")
+        
+        UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+        UINavigationBar.appearance().compactAppearance = navigationBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+    }
+    
     func setupColors() {
         self.tabBar.tintColor = UIColor(named: "CalendarColor")
-        self.navigationController?.navigationBar.barTintColor = UIColor(named: "CalendarColor")
     }
     
     func setupTabs() {
