@@ -12,6 +12,8 @@ class SearchViewController: UIViewController {
     private let searchView = SearchView()
     private let searchViewModel = SearchViewModel()
     
+    var searchTimer: Timer?
+    
     override func loadView() {
         view = searchView
     }
@@ -22,6 +24,10 @@ class SearchViewController: UIViewController {
         setupNavigationBar()
         setupDelegates()
         setupBindings()
+    }
+    
+    deinit {
+        searchTimer?.invalidate()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -72,7 +78,12 @@ extension SearchViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
+        searchTimer?.invalidate()
+        
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] timer in
+            guard let self = self else { return }
+            self.searchViewModel.search(keyword: searchText)
+        }
     }
 }
 
