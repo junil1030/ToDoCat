@@ -28,6 +28,8 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        detailView.contentText.delegate = self
+        
         setupBindings()
         setupActions()
     }
@@ -119,6 +121,23 @@ class DetailViewController: UIViewController {
     }
 }
 
+extension DetailViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == detailViewModel.placeholderText {
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = detailViewModel.placeholderText
+            textView.textColor = .lightGray
+        }
+    }
+}
+
+//MARK: - HeadingPHPickerViewControllerDelegate
 extension DetailViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
