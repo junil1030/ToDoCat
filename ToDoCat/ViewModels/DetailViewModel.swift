@@ -32,12 +32,14 @@ class DetailViewModel {
     var createdTime: Date?
     var updatedTime: Date?
     
+    let placeholderText = "할 일을 입력해보세요 !!"
+    
     init(mode: Mode, selectedDate: Date, imageService: ImageServiceProtocol = ImageService()) {
         self.mode = mode
         self.selectedDate = selectedDate
         switch mode {
         case .new:
-            self.content = "할 일을 입력해보세요 !!"
+            self.content = placeholderText
             self.titleImage = UIImage(named: "DefaultImage")?.resized(to: CGSize(width: 40, height: 40))
             self.addButtonText = "추가하기"
             self.createdTime = nil
