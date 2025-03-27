@@ -71,7 +71,7 @@ class SettingsViewController: UIViewController {
                                                  """
             
             vc.setToRecipients(["dccrdseo@naver.com"])
-            vc.setSubject("[\(Constants.engTitle)) 문의")
+            vc.setSubject("[\(Constants.engTitle)] 문의")
             vc.setMessageBody(bodyString, isHTML: false)
             
             self.present(vc, animated: true, completion: nil)
