@@ -62,7 +62,7 @@ class DetailViewController: UIViewController {
         
         detailViewModel.onImageChanged = { [weak self] image in
             DispatchQueue.main.async {
-                self?.detailView.titleImage.image = image
+                self?.detailView.updateImage(image: image)
             }
         }
     }
@@ -125,7 +125,7 @@ extension DetailViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == detailViewModel.placeholderText {
             textView.text = ""
-            textView.textColor = .black
+            textView.textColor = UIColor(named: "TextColor")
         }
     }
     
