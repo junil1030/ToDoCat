@@ -251,7 +251,6 @@ class DetailView: UIView {
             
             // 이미지 비율 유지
             if let image = titleImage.image {
-                print("아아아")
                 let aspectRatio = image.size.height / image.size.width
                 make.height.equalTo(titleImage.snp.width).multipliedBy(aspectRatio)
             } else {
