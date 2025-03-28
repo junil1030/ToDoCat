@@ -11,6 +11,7 @@ class SettingsViewModel {
     let sections = ["서비스", "정보"]
     
     var showResetAlert: (() -> Void)?
+    var showReview: (() -> Void)?
     var openMail: (() -> Void)?
     var showOpenSourceLicenses: (() -> Void)?
     var appVersion: String {
@@ -22,6 +23,9 @@ class SettingsViewModel {
         [
             SettingsOptionModel(title: "데이터 초기화", detail: nil) { [weak self] in
                 self?.showResetAlert?()
+            },
+            SettingsOptionModel(title: "리뷰 남기기", detail: nil) { [weak self] in
+                self?.showReview?()
             },
             SettingsOptionModel(title: "문의하기", detail: nil) { [weak self] in
                 self?.openMail?()
