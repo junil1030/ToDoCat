@@ -163,6 +163,48 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    // 삭제 버튼 활성화
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let todo = cachedFilteredToDoList[indexPath.row]
+            if ToDoDataManager.shared.deleteToDo(id: todo.id) {
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+            } else {
+                view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] (action, view, completionHandler) in
+            if let todo = self?.cachedFilteredToDoList[indexPath.row] {
+                
+                if ToDoDataManager.shared.deleteToDo(id: todo.id) {
+                    DispatchQueue.main.async {
+                        self?.updateUI()
+                    }
+                    completionHandler(true)
+                } else {
+                    view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
+                }
+            }
+        }
+        
+        // 삭제 버튼 커스터마이징 (옵션)
+        deleteAction.backgroundColor = .red
+        deleteAction.image = UIImage(systemName: "trash")
+        
+        // 스와이프 액션 구성
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return swipeConfiguration
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 84
     }
