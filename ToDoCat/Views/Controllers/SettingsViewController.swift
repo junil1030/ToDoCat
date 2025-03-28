@@ -32,6 +32,7 @@ class SettingsViewController: UIViewController {
     private func setupBindings() {
         settingsViewModel.showResetAlert = { [weak self] in self?.showResetAlert() }
         settingsViewModel.openMail = { [weak self] in self?.openMail() }
+        settingsViewModel.showReview = { [weak self] in self?.showReview() }
         settingsViewModel.showOpenSourceLicenses = { [weak self] in self?.showOpenSourceLicenses() }
     }
     
@@ -80,6 +81,12 @@ class SettingsViewController: UIViewController {
             let okAction = UIAlertAction(title: "확인", style: .destructive, handler: nil)
             sendMailErrorAlert.addAction(okAction)
             self.present(sendMailErrorAlert, animated: true, completion: nil)
+        }
+    }
+    
+    private func showReview() {
+        if let reviewUrl = URL(string: "itms-apps://itunes.apple.com/app/id6743777075?action=write-review") {
+            UIApplication.shared.open(reviewUrl, options: [:], completionHandler: nil)
         }
     }
     
