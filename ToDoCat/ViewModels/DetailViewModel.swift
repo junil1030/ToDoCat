@@ -40,7 +40,7 @@ class DetailViewModel {
         switch mode {
         case .new:
             self.content = placeholderText
-            self.titleImage = UIImage(named: "DefaultImage")?.resized(to: CGSize(width: 40, height: 40))
+            self.titleImage = UIImage(named: "DefaultImage")
             self.addButtonText = "추가하기"
             self.createdTime = nil
             self.updatedTime = nil
@@ -58,6 +58,7 @@ class DetailViewModel {
         
         DispatchQueue.main.async { [weak self] in
             self?.onDataUpdated?()
+            self?.onImageChanged?(self?.titleImage)
         }
     }
     
