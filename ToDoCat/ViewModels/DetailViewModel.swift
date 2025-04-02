@@ -14,6 +14,7 @@ class DetailViewModel {
     }
     
     private var mode: Mode
+    private let dataManager: ToDoDataEditable
     private let imageService: ImageServiceProtocol
     var selectedDate: Date
     var currentToDoItem: ToDoItem?
@@ -21,6 +22,7 @@ class DetailViewModel {
     var onImageChanged: ((UIImage?) -> Void)?
     var onDataUpdated: (() -> Void)?
     var onDataAdded: (() -> Void)?
+    var onDismiss: (() -> Void)?
     
     var content: String
     var titleImage: UIImage? {
@@ -34,9 +36,15 @@ class DetailViewModel {
     
     let placeholderText = "할 일을 입력해보세요 !!"
     
-    init(mode: Mode, selectedDate: Date, imageService: ImageServiceProtocol = ImageService()) {
+    init(mode: Mode,
+         selectedDate: Date,
+         dataManager: ToDoDataEditable,
+         imageService: ImageServiceProtocol = ImageService()) {
         self.mode = mode
         self.selectedDate = selectedDate
+        self.dataManager = dataManager
+        self.imageService = imageService
+        
         switch mode {
         case .new:
             self.content = placeholderText
@@ -53,8 +61,6 @@ class DetailViewModel {
             self.createdTime = todoItem.createdAt
             self.updatedTime = todoItem.updatedAt
         }
-        
-        self.imageService = imageService
         
         DispatchQueue.main.async { [weak self] in
             self?.onDataUpdated?()
@@ -78,11 +84,14 @@ class DetailViewModel {
             updatedAt: Date()
         )
         
-        if ToDoDataManager.shared.createToDo(todoItem: newToDo) {
+        let result = dataManager.createToDo(todoItem: newToDo)
+
+        switch result {
+        case .success:
             print("저장 완료")
             onDataAdded?()
-        } else {
-            fatalError("저장에 실패했습니다. 잠시 후 다시 시도해주세요.")
+        case .failure(let error):
+            print("저장에 실패했습니다. 에러: \(error)")
         }
     }
     
@@ -96,11 +105,14 @@ class DetailViewModel {
         toDoItem.image = titleImage
         toDoItem.updatedAt = Date()
         
-        if ToDoDataManager.shared.updateToDo(id: toDoItem.id, content: toDoItem.content, image: toDoItem.image) {
+        let result = dataManager.updateToDo(id: toDoItem.id, content: toDoItem.content, image: toDoItem.image)
+        
+        switch result {
+        case .success:
             print("저장 완료")
             onDataAdded?()
-        } else {
-            fatalError("저장에 실패했습니다. 잠시 후 다시 시도해주세요.")
+        case .failure(let error):
+            print("저장에 실패했습니다. 에러: \(error)")
         }
     }
     
