@@ -1,10 +1,3 @@
-//
-//  DetailView.swift
-//  ToDoCat
-//
-//  Created by 서준일 on 3/14/25.
-//
-
 import UIKit
 import SnapKit
 
@@ -13,7 +6,15 @@ class DetailView: UIView {
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .clear
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.showsHorizontalScrollIndicator = false
         return scrollView
+    }()
+    
+    lazy var contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
     }()
     
     lazy var titleLabel: UILabel = {
@@ -48,6 +49,7 @@ class DetailView: UIView {
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.layer.cornerRadius = 15
+        image.image = UIImage(named: "DefaultImage")
         return image
     }()
     
@@ -95,8 +97,6 @@ class DetailView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 10
-        //        stackView.isLayoutMarginsRelativeArrangement = true
-        //        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         return stackView
     }()
     
@@ -127,17 +127,26 @@ class DetailView: UIView {
         return button
     }()
     
-    lazy var totalStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, createdTimeLabel, updatedTimeLabel, titleImage, buttonStackView, contentText, addButton])
+    // UIStackView는 사용하지만 이미지뷰는 스택뷰 밖에서 별도로 관리
+    lazy var topStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, createdTimeLabel, updatedTimeLabel])
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 10
         stackView.alignment = .fill
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         return stackView
     }()
     
+    lazy var bottomStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [buttonStackView, contentText, addButton])
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.spacing = 10
+        stackView.alignment = .fill
+        return stackView
+    }()
+    
+    // setupUI() 함수와 생성자만 유지
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -152,124 +161,106 @@ class DetailView: UIView {
         let resizedImage = image.resizedToMaxSize(maxWidth: maxWidth, maxHeight: maxHeight)
         titleImage.image = resizedImage
         
-        let imageSize = resizedImage.size
+        // 이미지 크기에 맞게 이미지뷰 제약 조건 재설정
         titleImage.snp.remakeConstraints { make in
-            make.top.equalTo(updatedTimeLabel.snp.bottom).offset(20)
+            make.top.equalTo(topStackView.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
-            make.width.equalTo(imageSize.width)
-            make.height.equalTo(imageSize.height)
+            
+            // 이미지 실제 크기를 유지하되 최대 크기 제한
+            let imageSize = resizedImage.size
+            make.width.equalTo(imageSize.width).priority(.high)
+            make.height.equalTo(imageSize.height).priority(.high)
+            
+            // 너무 커지지 않도록 최대 제한
+            make.width.lessThanOrEqualTo(maxWidth).priority(.required)
+            make.height.lessThanOrEqualTo(maxHeight).priority(.required)
+            
+            // 화면 밖으로 튀어나가지 않도록 (안전하게 양수 값으로 설정)
+            make.width.lessThanOrEqualTo(max(20, self.frame.width - 40)).priority(.required)
         }
+        
+        // 이미지 크기가 변경되면 레이아웃을 업데이트
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     private func setupUI() {
         backgroundColor = UIColor(named: "BackgroundColor")
         
+        // 뷰 크기가 0이면 기본값 설정 (레이아웃 경고 방지)
+        if frame.width <= 0 {
+            frame.size.width = UIScreen.main.bounds.width
+        }
+        
+        // 스크롤 뷰 설정
         addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
-//            make.top.equalTo(safeAreaLayoutGuide.snp.top)
-//            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
-//            make.leading.trailing.equalToSuperview()
-            
-            make.edges.equalToSuperview()
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
         
-        let contentView = UIView()
+        // 컨텐츠 뷰 설정
         scrollView.addSubview(contentView)
-        
-        contentView.addSubview(totalStackView)
-        
         contentView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            //make.width.equalTo(scrollView.snp.width)
-            make.width.equalTo(self)
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide) // 중요: 스크롤 뷰와 동일한 너비
         }
         
-        totalStackView.snp.makeConstraints { make in
-//            make.top.bottom.equalToSuperview().inset(5) // 스크롤 가능하도록 설정
-//            make.leading.equalToSuperview().inset(20) // 왼쪽 여백 20
-//            make.trailing.equalToSuperview().inset(20) // 오른쪽 여백 20
-//            make.width.equalTo(scrollView.snp.width).offset(-40) // 20 + 20만큼 줄이기
-//            make.height.greaterThanOrEqualTo(scrollView.snp.height).priority(.low)
-            
-//            make.top.equalTo(scrollView.snp.top)
-//            make.leading.equalTo(scrollView.snp.leading).offset(20)
-//            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
-//            make.width.equalTo(scrollView.snp.width).offset(-40)
-            
-//            make.top.bottom.equalToSuperview().inset(20)
-//            make.leading.trailing.equalToSuperview().inset(20)
-//            make.width.equalTo(scrollView.snp.width).offset(-40)
-            make.edges.equalToSuperview()
+        // 상단 스택 뷰 (타이틀, 생성 시간, 업데이트 시간)
+        contentView.addSubview(topStackView)
+        topStackView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.left.right.equalToSuperview().inset(20)
         }
         
+        // 이미지 뷰 (스택 뷰의 일부가 아닌 독립적으로 배치)
+        contentView.addSubview(titleImage)
+        titleImage.snp.makeConstraints { make in
+            make.top.equalTo(topStackView.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
+            
+            // 기본 이미지 크기 설정 (이미지가 없을 때)
+            make.width.equalTo(300).priority(.high)
+            make.height.equalTo(300).priority(.high)
+            
+            // 최대 크기 제한
+            make.width.lessThanOrEqualTo(maxWidth).priority(.required)
+            make.height.lessThanOrEqualTo(maxHeight).priority(.required)
+            
+            // 화면 밖으로 튀어나가지 않도록 (안전하게 양수 값으로 설정)
+            make.width.lessThanOrEqualTo(max(20, self.frame.width - 40)).priority(.required)
+        }
+        
+        // 하단 스택 뷰 (버튼 스택, 컨텐트 텍스트, 추가 버튼)
+        contentView.addSubview(bottomStackView)
+        bottomStackView.snp.makeConstraints { make in
+            make.top.equalTo(titleImage.snp.bottom).offset(20)
+            make.left.right.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().offset(-20)
+        }
+        
+        // 개별 요소 설정
         titleLabel.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(30)
+            make.height.equalTo(30)
         }
         
         createdTimeLabel.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(20)
+            make.height.equalTo(20)
         }
         
         updatedTimeLabel.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(20)
+            make.height.equalTo(20)
         }
         
-        
-//        if let image = titleImage.image {
-//            let resizedImage = image.resizedToMaxSize(maxWidth: maxWidth, maxHeight: maxHeight)
-//            titleImage.image = resizedImage
-//            
-//            let imageSize = resizedImage.size
-//            titleImage.snp.remakeConstraints { make in
-//                make.top.equalTo(updatedTimeLabel.snp.bottom).offset(20)
-//                make.centerX.equalToSuperview()
-//                make.width.equalTo(imageSize.width)
-//                make.height.equalTo(imageSize.height)
-//            }
-//        } else {
-//            titleImage.snp.remakeConstraints { make in
-//                make.top.equalTo(updatedTimeLabel.snp.bottom).offset(20)
-//                make.centerX.equalToSuperview()
-//                make.width.equalTo(400)
-//                make.height.equalTo(400)
-//            }
-//        }
-        
-        titleImage.snp.makeConstraints { make in
-            //            make.centerX.equalToSuperview()
-            //            make.width.lessThanOrEqualTo(scrollView.snp.width).multipliedBy(0.4)
-            //
-            //            if let image = titleImage.image {
-            //                let aspectRatio = image.size.height / image.size.width
-            //                make.height.equalTo(titleImage.snp.width).multipliedBy(aspectRatio)
-            //            } else {
-            //                make.height.equalTo(titleImage.snp.width)
-            //            }
-            make.top.equalTo(updatedTimeLabel.snp.bottom).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.lessThanOrEqualToSuperview().multipliedBy(0.9)
-            
-            // 이미지 비율 유지
-            if let image = titleImage.image {
-                let aspectRatio = image.size.height / image.size.width
-                make.height.equalTo(titleImage.snp.width).multipliedBy(aspectRatio)
-            } else {
-                // 기본 이미지 크기 설정
-                make.width.equalTo(300)
-                make.height.equalTo(300)
-            }
-        }
-
         buttonStackView.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(40)
+            make.height.equalTo(40)
         }
         
         contentText.snp.makeConstraints { make in
-            make.height.equalTo(200).priority(.high)
+            make.height.equalTo(200)
         }
         
         addButton.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(50)
+            make.height.equalTo(50)
         }
     }
 }
