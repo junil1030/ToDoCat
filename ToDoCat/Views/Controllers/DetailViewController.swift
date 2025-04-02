@@ -9,11 +9,12 @@ import PhotosUI
 
 class DetailViewController: UIViewController {
     
-    private let detailView = DetailView()
-    private let detailViewModel: DetailViewModel
+    private let detailView: DetailView
+    private var detailViewModel: DetailViewModel
     
-    init(mode: DetailViewModel.Mode, selectedDate: Date) {
-        self.detailViewModel = DetailViewModel(mode: mode, selectedDate: selectedDate)
+    init(viewModel: DetailViewModel) {
+        self.detailViewModel = viewModel
+        self.detailView = DetailView()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -57,7 +58,7 @@ class DetailViewController: UIViewController {
         
         detailViewModel.onDataAdded = { [weak self] in
             // 토스트 메세지 띄워보는 거?
-            self?.navigationController?.popViewController(animated: true)
+            self?.detailViewModel.onDismiss?()
         }
         
         detailViewModel.onImageChanged = { [weak self] image in
@@ -93,9 +94,7 @@ class DetailViewController: UIViewController {
         detailViewModel.addImage(imageUrl: Constants.getCatImageUrl(says: nil)) { [weak self] success in
             DispatchQueue.main.async {
                 self?.view.hideToastActivity()
-                if success {
-                    
-                } else {
+                if !success {
                     self?.showToast(message: "이미지를 불러오지 못했습니다.")
                 }
             }
