@@ -9,10 +9,20 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    private let searchView = SearchView()
-    private let searchViewModel = SearchViewModel()
+    private let searchView: SearchView
+    private var searchViewModel: SearchViewModel
     
     var searchTimer: Timer?
+    
+    init(viewModel: SearchViewModel) {
+        self.searchViewModel = viewModel
+        self.searchView = SearchView()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = searchView
@@ -25,6 +35,10 @@ class SearchViewController: UIViewController {
         setupDelegates()
         setupBindings()
     }
+    
+//    func setViewModel(_ viewModel: SearchViewModel) {
+//        self.searchViewModel = viewModel
+//    }
     
     deinit {
         searchTimer?.invalidate()
@@ -54,20 +68,6 @@ class SearchViewController: UIViewController {
         searchViewModel.onDataChanged = { [weak self] in
             self?.searchView.tableView.reloadData()
         }
-        
-        searchViewModel.cellToDetailView = { [weak self] toDoItem in
-            self?.showDetailView(mode: .edit(toDoItem))
-        }
-        
-    }
-    
-    private func showDetailView(mode: DetailViewModel.Mode) {
-        guard let selectedDate = searchViewModel.currentToDoItem?.date else { return }
-        let detailViewController = DetailViewController(
-            mode: mode,
-            selectedDate: selectedDate
-        )
-        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 
