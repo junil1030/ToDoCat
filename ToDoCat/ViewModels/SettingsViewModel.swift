@@ -8,6 +8,8 @@ import UIKit
 
 class SettingsViewModel {
     
+    private let dataManager: ToDoDataDeletable
+    
     let sections = ["서비스", "정보"]
     
     var showResetAlert: (() -> Void)?
@@ -38,4 +40,19 @@ class SettingsViewModel {
             SettingsOptionModel(title: "버전", detail: self.appVersion, action: nil)
         ]
     ]
+    
+    init(dataManager: ToDoDataDeletable) {
+        self.dataManager = dataManager
+    }
+    
+    func deleteToDoAll() {
+        let result = dataManager.deleteToDoAll()
+        
+        switch result {
+        case .success:
+            print("삭제 완료")
+        case .failure(let error):
+            print("삭제에 실패했습니다. 에러: \(error)")
+        }
+    }
 }
