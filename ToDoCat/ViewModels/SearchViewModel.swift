@@ -8,6 +8,8 @@ import Foundation
 
 class SearchViewModel {
     
+    private let dataManager: ToDoDataSearchable
+    
     var searchResult: [ToDoItem] = [] {
         didSet {
             onDataChanged?()
@@ -18,13 +20,14 @@ class SearchViewModel {
     var cellToDetailView: ((ToDoItem) -> Void)?
     var onDataChanged: (() -> Void)?
     
+    init(dataManager: ToDoDataSearchable) {
+        self.dataManager = dataManager
+    }
+    
     func search(keyword: String) {
-        DispatchQueue.global().async { [weak self] in
-            let result = ToDoDataManager.shared.searchToDos(keyword: keyword)
-            
-            DispatchQueue.main.async {
-                self?.searchResult = result
-            }
+        DispatchQueue.main.async { [weak self] in
+            let result = self?.dataManager.searchToDos(keyword: keyword) ?? []
+            self?.searchResult = result
         }
     }
     
