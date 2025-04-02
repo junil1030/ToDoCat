@@ -9,97 +9,85 @@ import UIKit
 class HomeViewModel {
     
     //MARK: - Properties
+    private var dataManager: ToDoDataFetchable & ToDoDataDeletable & ToDoDataObserver
     private var allToDoList: [ToDoItem] = []
     private var selectedDate: Date = Date()
     private var filteredToDoList: [ToDoItem] = []
-    private var hasToDoCache: Bool = false
+    private var hasToDoForSelectedDate: Bool = false
     
+    //MARK: - Callbacks
     var navigateToDetailView: (() -> Void)?
     var cellToDetailView: ((ToDoItem) -> Void)?
     var onDateUpdate: (() -> Void)?
+    var onToDoListUpdated: (() -> Void)?
     
-    //MARK: - Methods
-    init() {
-        loadData {
-            self.onDateUpdate?()
-        }
-        
+    //MARK: - Initaliztion
+    init(dataManager: ToDoDataFetchable & ToDoDataDeletable & ToDoDataObserver) {
+        self.dataManager = dataManager
         setupBindings()
     }
     
+    //MARK: - Bindings
     func setupBindings() {
-        ToDoDataManager.shared.onDataChanged = { [weak self] in
+        dataManager.onDataChanged = { [weak self] in
             guard let self = self else { return }
+            
             self.loadData {
-                self.onDateUpdate?()
+                self.onToDoListUpdated?()
             }
         }
     }
     
-    func printAllToDoList() {
-        for num in 0..<allToDoList.count {
-            print("content: \(allToDoList[num].content), createdAt: \(allToDoList[num].createdAt)")
+    //MARK: - Data Handling
+    func loadData(completion: (() -> Void)? = nil) {
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             
+            self.allToDoList = self.dataManager.getAllToDos()
+            self.updateFilteredList()
+            completion?()
         }
-    }
-    
-    func loadData(completion: @escaping () -> Void) {
-        DispatchQueue.global(qos: .background).async {
-            let todos = ToDoDataManager.shared.getAllToDos()
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.allToDoList = todos
-                completion()
-            }
-        }
-    }
-    
-    func updateSelectedDate(_ date: Date) {
-        selectedDate = date
-        filterToDoList()
-    }
-
-    func addTaskButtonTapped() {
-        navigateToDetailView?()
-    }
-    
-    func toDoCellTapped(index: IndexPath) {
-        cellToDetailView?(filteredToDoList[index.row])
-    }
-    
-    func hasEvent(for date: Date) -> Bool {
-        let calendar = Calendar.current
-        return allToDoList.contains {
-            return calendar.isDate($0.date, inSameDayAs: date.toKST())
-        }
-    }
-    
-    func getFilteredToDoList() -> [ToDoItem] {
-        return filteredToDoList
     }
     
     func getSelectedDate() -> Date {
         return selectedDate
     }
     
-    //MARK: - Private Methods
-    private func filterToDoList() {
-        let calendar = Calendar.current
-        let strippedSelectedDate = calendar.startOfDay(for: selectedDate)
+    func updateSelectedDate(_ date: Date) {
+        selectedDate = date
+        updateFilteredList()
         
-        let newFilteredList = allToDoList.filter {
-            let strippedCreatedAt = calendar.startOfDay(for: $0.date)
-            return strippedCreatedAt == strippedSelectedDate
-        }
-        
-        if filteredToDoList != newFilteredList {
-            filteredToDoList = newFilteredList
-            updateToDoCache()
-            onDateUpdate?()
-        }
+        onDateUpdate?()
     }
     
-    private func updateToDoCache() {
-        hasToDoCache = !filteredToDoList.isEmpty
+    func getFilteredToDoList() -> [ToDoItem] {
+        return filteredToDoList
+    }
+    
+    func hasEvent(for date: Date) -> Bool {
+        let todosForDate = dataManager.getToDos(forDate: date)
+        return !todosForDate.isEmpty
+    }
+    
+    func addTaskButtonTapped() {
+        navigateToDetailView?()
+    }
+    
+    func toDoCellTapped(index: IndexPath) {
+        //cellToDetailView?(filteredToDoList[index.row])
+        let selectedToDo = filteredToDoList[index.row]
+        cellToDetailView?(selectedToDo)
+    }
+
+    func deleteToDo(id: UUID) -> Result<Void, Error> {
+        return dataManager.deleteToDo(id: id)
+    }
+    
+    // MARK: - Private Methods
+    private func updateFilteredList() {
+        filteredToDoList = dataManager.getToDos(forDate: selectedDate)
+//        print(filteredToDoList)
+//        hasToDoForSelectedDate = !filteredToDoList.isEmpty
     }
 }
