@@ -8,15 +8,25 @@
 import UIKit
 import SnapKit
 import FSCalendar
+import RealmSwift
 
 class HomeViewController: UIViewController {
     
     private let homeView = HomeView()
-    private let homeViewModel = HomeViewModel()
-    
-    private let detailView = DetailView()
+    private var homeViewModel: HomeViewModel
     
     private var cachedFilteredToDoList: [ToDoItem] = []
+    private var isRefreshing = false // 중복 리프레시 방지용
+    
+    init(viewModel: HomeViewModel) {
+        self.homeViewModel = viewModel
+        //print("HomeViewController - init() 호출됨")
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = homeView
@@ -24,7 +34,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupNavigationBar()
         setupDelegates()
         setupBindings()
@@ -36,6 +46,7 @@ class HomeViewController: UIViewController {
         }
     }
     
+    //MARK: - Setup Methods
     private func setupNavigationBar() {
         let rigthButton = UIBarButtonItem(
             barButtonSystemItem: .add,
@@ -56,17 +67,15 @@ class HomeViewController: UIViewController {
             self?.adjustTableViewPosition(for: newHeight)
         }
         
-        homeViewModel.navigateToDetailView = { [weak self] in
-            self?.showDetailView(mode: .new)
-        }
-        
-        homeViewModel.cellToDetailView = { [weak self] toDoItem in
-            self?.showDetailView(mode: .edit(toDoItem))
-        }
-        
         homeViewModel.onDateUpdate = { [weak self] in
             DispatchQueue.main.async {
                 self?.refreshData()
+            }
+        }
+        
+        homeViewModel.onToDoListUpdated = { [weak self] in
+            DispatchQueue.main.async {
+                self?.refreshData(reloadCalendar: true)
             }
         }
     }
@@ -76,13 +85,6 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-    private func showDetailView(mode: DetailViewModel.Mode) {
-        let detailViewController = DetailViewController(
-            mode: mode,
-            selectedDate: homeViewModel.getSelectedDate()
-        )
-        navigationController?.pushViewController(detailViewController, animated: true)
-    }
     
     private func adjustTableViewPosition(for newHeight: CGFloat) {
         // 캘린더 높이에 따라 테이블 뷰 위치 조정
@@ -92,22 +94,30 @@ class HomeViewController: UIViewController {
         homeView.layoutIfNeeded() // 레이아웃 업데이트
     }
     
-    private func refreshData() {
-        DispatchQueue.global(qos: .userInitiated).async {
+    private func refreshData(reloadCalendar: Bool = false) {
+        if isRefreshing { return }
+        isRefreshing = true
+        
+        // 백그라운드 스레드 사용 제거, 메인 스레드에서 직접 실행
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
             let filteredList = self.homeViewModel.getFilteredToDoList()
-            DispatchQueue.main.async {
-                self.cachedFilteredToDoList = filteredList
-                self.updateUI()
-            }
+            self.cachedFilteredToDoList = filteredList
+            self.updateUI(reloadCalendar: reloadCalendar)
+            self.isRefreshing = false
         }
     }
     
-    private func updateUI() {
+    private func updateUI(reloadCalendar: Bool = false) {
         homeView.toDoTableView.showEmptyState(cachedFilteredToDoList.isEmpty)
-        homeView.calendarView.reloadData()
-        homeView.toDoTableView.reloadData()
+       
+        // 캘린더는 필요할 때만 리로드
+        if reloadCalendar {
+            homeView.calendarView.reloadData()
+        }
         
-        homeViewModel.updateSelectedDate(homeViewModel.getSelectedDate())
+        homeView.toDoTableView.reloadData()
     }
 }
 
@@ -115,8 +125,8 @@ class HomeViewController: UIViewController {
 extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        print("✅ calendar:didSelect 호출됨: \(date.toString())")
         homeViewModel.updateSelectedDate(date)
-        print("선택한 날짜: \(date.toString())")
     }
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
@@ -171,11 +181,15 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let todo = cachedFilteredToDoList[indexPath.row]
-            if ToDoDataManager.shared.deleteToDo(id: todo.id) {
+            
+            let result = homeViewModel.deleteToDo(id: todo.id)
+            
+            switch result {
+            case .success:
                 DispatchQueue.main.async {
-                    self.updateUI()
+                    self.refreshData()
                 }
-            } else {
+            case .failure:
                 view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
             }
         }
@@ -183,16 +197,21 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] (action, view, completionHandler) in
-            if let todo = self?.cachedFilteredToDoList[indexPath.row] {
-                
-                if ToDoDataManager.shared.deleteToDo(id: todo.id) {
-                    DispatchQueue.main.async {
-                        self?.updateUI()
-                    }
-                    completionHandler(true)
-                } else {
-                    view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
+            guard let self = self else { return }
+            
+            let todo = self.cachedFilteredToDoList[indexPath.row]
+            
+            let result = self.homeViewModel.deleteToDo(id: todo.id)
+            
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self.refreshData()
                 }
+                completionHandler(true)
+            case .failure:
+                self.view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
+                completionHandler(false)
             }
         }
         
