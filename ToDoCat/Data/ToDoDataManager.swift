@@ -7,20 +7,114 @@
 import UIKit
 import RealmSwift
 
-//MARK: - ToDoData Manager
-class ToDoDataManager {
-    //MARK: - Singletone  패턴
-    static let shared = ToDoDataManager()
+// MARK: - RealmManageable Protocol
+protocol RealmManageable {
+    func getObject<T: Object>(ofType type: T.Type, forPrimaryKey key: String) -> T?
+    func getObjects<T: Object>(_ type: T.Type) -> Results<T>
+    func getFilteredObjects<T: Object>(_ type: T.Type, predicate: NSPredicate) -> Results<T>
+    func getSortedObjects<T: Object>(_ type: T.Type, sortedByKeyPath keyPath: String, ascending: Bool) -> Results<T>
+    func write<T>(_ block: () throws -> T) throws -> T
+    func add<T: Object>(_ object: T, update: Realm.UpdatePolicy) throws
+    func delete<T: Object>(_ object: T) throws
+    func deleteAll<T: Object>(_ objects: Results<T>) throws
+    func observeChanges<T: Object>(for type: T.Type, completion: @escaping (RealmCollectionChange<Results<T>>) -> Void) -> NotificationToken
+}
+
+// MARK: - Realm 구현
+class RealmManager: RealmManageable {
+    private let realm: Realm
     
+    init(configuration: Realm.Configuration = Realm.Configuration(schemaVersion: 1)) throws {
+        realm = try Realm(configuration: configuration)
+        print("Realm 위치: \(configuration.fileURL?.absoluteString ?? "Unknown")")
+    }
+    
+    func getObject<T: Object>(ofType type: T.Type, forPrimaryKey key: String) -> T? {
+        return realm.object(ofType: type, forPrimaryKey: key)
+    }
+    
+    func getObjects<T: Object>(_ type: T.Type) -> Results<T> {
+        return realm.objects(type)
+    }
+    
+    func getFilteredObjects<T: Object>(_ type: T.Type, predicate: NSPredicate) -> Results<T> {
+        return realm.objects(type).filter(predicate)
+    }
+    
+    func getSortedObjects<T: Object>(_ type: T.Type, sortedByKeyPath keyPath: String, ascending: Bool) -> Results<T> {
+        return realm.objects(type).sorted(byKeyPath: keyPath, ascending: ascending)
+    }
+    
+    func write<T>(_ block: () throws -> T) throws -> T {
+        try realm.write(block)
+    }
+    
+    func add<T: Object>(_ object: T, update: Realm.UpdatePolicy = .modified) throws {
+        try realm.write {
+            realm.add(object, update: update)
+        }
+    }
+    
+    func delete<T: Object>(_ object: T) throws {
+        try realm.write {
+            realm.delete(object)
+        }
+    }
+    
+    func deleteAll<T: Object>(_ objects: Results<T>) throws {
+        try realm.write {
+            realm.delete(objects)
+        }
+    }
+    
+    func observeChanges<T: Object>(for type: T.Type, completion: @escaping (RealmCollectionChange<Results<T>>) -> Void) -> NotificationToken {
+        let results = realm.objects(type)
+        return results.observe(completion)
+    }
+}
+
+//MARK: - ToDoData Protocol
+protocol ToDoDataFetchable {
+    func getAllToDos() ->[ToDoItem]
+    func getToDos(forDate date: Date) -> [ToDoItem]
+}
+
+protocol ToDoDataSearchable {
+    func searchToDos(keyword: String) -> [ToDoItem]
+}
+
+protocol ToDoDataEditable {
+    func createToDo(todoItem: ToDoItem) -> Result<Void, Error>
+    func updateToDo(id: UUID, content: String, image: UIImage?) -> Result<Void, Error>
+    func toggleCompletion(id: UUID) -> Result<Void, Error>
+}
+
+protocol ToDoDataDeletable {
+    func deleteToDo(id: UUID) -> Result<Void, Error>
+    func deleteToDoAll() -> Result<Void, Error>
+}
+
+protocol ToDoDataObserver {
+    var onDataChanged: (() -> Void)? { get set }
+}
+
+// MARK: - 에러
+enum ToDoDataError: Error {
+    case realmError(Error)
+    case itemNotFound
+    case invalidData
+    case unknown
+}
+
+//MARK: - ToDoData Manager
+class ToDoDataManager: ToDoDataObserver {
+    
+    private let realmManager: RealmManageable
     private var notificationToken: NotificationToken?
     var onDataChanged: (() -> Void)?
     
-    private init() {
-        let realmConfig = Realm.Configuration(schemaVersion: 1)
-        
-        Realm.Configuration.defaultConfiguration = realmConfig
-        
-        print("realm 위치 \(Realm.Configuration.defaultConfiguration.fileURL!)")
+    init(realmManager: RealmManageable) {
+        self.realmManager = realmManager
         setupObserver()
     }
     
@@ -30,11 +124,7 @@ class ToDoDataManager {
     
     //MARK: - Realm Noti
     private func setupObserver() {
-        do {
-            let realm = try Realm()
-            let results = realm.objects(ToDoItemRealm.self)
-            
-            notificationToken = results.observe { [weak self] changes in
+            notificationToken = realmManager.observeChanges(for: ToDoItemRealm.self) { [weak self] changes in
                 switch changes {
                 case .initial, .update:
                     self?.onDataChanged?()
@@ -42,73 +132,58 @@ class ToDoDataManager {
                     print("Error observing Realm Changes: \(error)")
                 }
             }
-            
-        } catch {
-            print("Error setting up Realm observer: \(error)")
         }
-    }
-    
-    //MARK: - CRUD Methods
-    func createToDo(todoItem: ToDoItem, isComplete: Bool = false) -> Bool {
-        do {
-            let realm = try Realm()
-            
-            let realmItem = ToDoItemRealm(toDoItem: todoItem)
-            try realm.write {
-                realm.add(realmItem)
-            }
-            return true
-        } catch {
-            print("Error creating todo: \(error)")
-            return false
-        }
-    }
-    
-    func getToDo(by id: UUID) -> ToDoItem? {
-        let realm = try! Realm()
+}
+
+//MARK: - ToDoDataFetchableProtocol
+extension ToDoDataManager: ToDoDataFetchable {
+    func getAllToDos() -> [ToDoItem] {
+        let realmResults = realmManager.getSortedObjects(ToDoItemRealm.self, sortedByKeyPath: "date", ascending: true)
         
-        guard let realmItem = realm.object(ofType: ToDoItemRealm.self, forPrimaryKey: id.uuidString) else { return nil }
-         
-        return realmItem.toToDoItem()
+        return realmResults.map { $0.toToDoItem() }
     }
     
     func getToDos(forDate date: Date) -> [ToDoItem] {
-        let realm = try! Realm()
-        
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
         
-        let realmItems = realm.objects(ToDoItemRealm.self)
-            .filter("date >= %@ AND date < %@", startOfDay, endOfDay)
+        let predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as NSDate, endOfDay as NSDate)
+        let realmItems = realmManager.getFilteredObjects(ToDoItemRealm.self, predicate: predicate)
         
         return realmItems.map { $0.toToDoItem() }
     }
-    
+}
+
+//MARK: - ToDoDataSearchableProtocol
+extension ToDoDataManager: ToDoDataSearchable {
     func searchToDos(keyword: String) -> [ToDoItem] {
-        let realm = try! Realm()
-        
         let predicate = NSPredicate(format: "content CONTAINS[cd] %@", keyword)
-        let realmItems = realm.objects(ToDoItemRealm.self).filter(predicate)
+        let realmItems = realmManager.getFilteredObjects(ToDoItemRealm.self, predicate: predicate)
         
         return realmItems.map { $0.toToDoItem() }
     }
-    
-    func getAllToDos() -> [ToDoItem] {
-        let realm = try! Realm()
-        
-        let realmResults = realm.objects(ToDoItemRealm.self).sorted(byKeyPath: "date", ascending: true)
-                
-        return realmResults.map { $0.toToDoItem() }
+}
+
+//MARK: - ToDoDataEditableProtocol
+extension ToDoDataManager: ToDoDataEditable {
+    func createToDo(todoItem: ToDoItem) -> Result<Void, Error> {
+        do {
+            let realmItem = ToDoItemRealm(toDoItem: todoItem)
+            try realmManager.add(realmItem, update: .modified)
+            return .success(())
+        } catch {
+            return .failure(ToDoDataError.realmError(error))
+        }
     }
     
-    func updateToDo(id: UUID, content: String, image: UIImage?) -> Bool {
-        let realm = try! Realm()
-        
-        guard let todoToUpdate = realm.object(ofType: ToDoItemRealm.self, forPrimaryKey: id.uuidString) else { return false }
-        
+    func updateToDo(id: UUID, content: String, image: UIImage?) -> Result<Void, Error> {
         do {
-            try realm.write {
+            guard let todoToUpdate = realmManager.getObject(ofType: ToDoItemRealm.self, forPrimaryKey: id.uuidString) else {
+                return .failure(ToDoDataError.itemNotFound)
+            }
+            
+            try realmManager.write {
                 todoToUpdate.content = content
                 
                 if let newImage = image {
@@ -119,63 +194,53 @@ class ToDoDataManager {
                 
                 todoToUpdate.updatedAt = Date()
             }
-            return true
             
+            return .success(())
         } catch {
-            print("Error updating ToDo: \(error)")
-            return false
+            return .failure(ToDoDataError.realmError(error))
         }
     }
     
-    func toggleCompletion(id: UUID) -> Bool {
-        let realm = try! Realm()
-        
-        guard let todoToUpdate = realm.object(ofType: ToDoItemRealm.self, forPrimaryKey: id.uuidString) else { return false }
-        
+    func toggleCompletion(id: UUID) -> Result<Void, Error> {
         do {
-            try realm.write {
+            guard let todoToUpdate = realmManager.getObject(ofType: ToDoItemRealm.self, forPrimaryKey: id.uuidString) else {
+                return .failure(ToDoDataError.itemNotFound)
+            }
+            
+            try realmManager.write {
                 todoToUpdate.isCompleted = !todoToUpdate.isCompleted
                 todoToUpdate.updatedAt = Date()
             }
-            return true
             
+            return .success(())
         } catch {
-            print("Error toggling Completion: \(error)")
-            return false
+            return .failure(ToDoDataError.realmError(error))
+        }
+    }
+}
+
+//MARK: - ToDoDeletableProtocol
+extension ToDoDataManager: ToDoDataDeletable {
+    func deleteToDo(id: UUID) -> Result<Void, Error> {
+        do {
+            guard let todoToDelete = realmManager.getObject(ofType: ToDoItemRealm.self, forPrimaryKey: id.uuidString) else {
+                return .failure(ToDoDataError.itemNotFound)
+            }
+            
+            try realmManager.delete(todoToDelete)
+            return .success(())
+        } catch {
+            return .failure(ToDoDataError.realmError(error))
         }
     }
     
-    func deleteToDo(id: UUID) -> Bool {
-        let realm = try! Realm()
-        
-        guard let todoToDelete = realm.object(ofType: ToDoItemRealm.self, forPrimaryKey: id.uuidString) else { return false }
-        
+    func deleteToDoAll() -> Result<Void, Error> {
         do {
-            try realm.write {
-                realm.delete(todoToDelete)
-            }
-            return true
-            
+            let todosToDelete = realmManager.getObjects(ToDoItemRealm.self)
+            try realmManager.deleteAll(todosToDelete)
+            return .success(())
         } catch {
-            print("Error toggling Completion: \(error)")
-            return false
-        }
-    }
-    
-    func deleteToDoAll() -> Bool {
-        let realm = try! Realm()
-        
-        let todosToDelete = realm.objects(ToDoItemRealm.self)
-        
-        do {
-            try realm.write {
-                realm.delete(todosToDelete)
-            }
-            return true
-            
-        } catch {
-            print("Error deleting todos for date: \(error)")
-            return false
+            return .failure(ToDoDataError.realmError(error))
         }
     }
 }
