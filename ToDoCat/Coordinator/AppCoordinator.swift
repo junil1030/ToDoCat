@@ -10,8 +10,6 @@ import RealmSwift
 
 protocol Coordinator: AnyObject {
     var childCoordinators: [Coordinator] { get set }
-    
-    //func start()
     func removeChild(_ coordinator: Coordinator)
 }
 
@@ -35,16 +33,12 @@ class AppCoordinator: Coordinator {
     func start() -> UIViewController {
         let mainTabBarController = MainTabBarController()
         
-        // 디버깅 로그 추가
-        //print("⭐️ AppCoordinator creating MainTabBarController: \(mainTabBarController)")
-        
         let tabBarCoordinator = MainTabBarCoordinator(tabBarController: mainTabBarController, dataManager: dataManager)
         tabBarCoordinator.parentCoordinator = self
         
         childCoordinators.append(tabBarCoordinator)
         tabBarCoordinator.start()
         
-        //print("⭐️ AppCoordinator returning MainTabBarController: \(mainTabBarController)")
         return mainTabBarController
     }
     
