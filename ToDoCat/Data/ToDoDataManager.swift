@@ -231,19 +231,14 @@ extension ToDoDataManager: ToDoDataEditable {
     }
     
     func updateToDo(id: UUID, content: String, image: UIImage?, completion: @escaping (Result<Void, Error>) -> Void) {
-        // 먼저 메인 스레드에서 객체를 찾기
         guard let todoToUpdate = realmManager.getObject(ofType: ToDoItemRealm.self, forPrimaryKey: id.uuidString) else {
             completion(.failure(ToDoDataError.itemNotFound))
             return
         }
         
-        // ThreadSafeReference 생성
         let reference = realmManager.createThreadSafeReference(for: todoToUpdate)
-        
-        // 이미지 데이터 미리 처리
         let imageData = image?.jpegData(compressionQuality: 0.7)
         
-        // 백그라운드에서 처리
         realmManager.performBackgroundTask {
             guard let todoItem = self.realmManager.resolve(reference) else {
                 return Result<Void, Error>.failure(ToDoDataError.itemNotFound)
@@ -270,7 +265,6 @@ extension ToDoDataManager: ToDoDataEditable {
             return
         }
         
-        // ThreadSafeReference 생성
         let reference = realmManager.createThreadSafeReference(for: todoToUpdate)
         let currentCompletionState = todoToUpdate.isCompleted
         
@@ -301,7 +295,6 @@ extension ToDoDataManager: ToDoDataDeletable {
             return
         }
         
-        // ThreadSafeReference 생성
         let reference = realmManager.createThreadSafeReference(for: todoToDelete)
         
         realmManager.performBackgroundTask {
