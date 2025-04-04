@@ -9,6 +9,7 @@ import Foundation
 class SearchViewModel {
     
     private let dataManager: ToDoDataSearchable
+    private var isSearching = false
     
     var searchResult: [ToDoItem] = [] {
         didSet {
@@ -25,13 +26,30 @@ class SearchViewModel {
     }
     
     func search(keyword: String) {
-        DispatchQueue.main.async { [weak self] in
-            let result = self?.dataManager.searchToDos(keyword: keyword) ?? []
-            self?.searchResult = result
+        // 이미 검색 중이면 return
+        guard !isSearching else { return }
+        
+        // 검색어가 너무 짧으면 검색하지 않음
+        if keyword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            searchResult = []
+            return
+        }
+        
+        isSearching = true
+        
+        dataManager.searchToDos(keyword: keyword) { [weak self] results in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                self.searchResult = results
+                self.isSearching = false
+            }
         }
     }
     
     func toDoCellTapped(index: IndexPath) {
+        guard index.row < searchResult.count else { return }
+        
         currentToDoItem = searchResult[index.row]
         guard let currentToDoItem = currentToDoItem else { return }
         cellToDetailView?(currentToDoItem)

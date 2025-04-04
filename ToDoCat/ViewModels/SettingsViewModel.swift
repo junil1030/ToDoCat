@@ -16,8 +16,9 @@ class SettingsViewModel {
     var showReview: (() -> Void)?
     var openMail: (() -> Void)?
     var showOpenSourceLicenses: (() -> Void)?
+    var onResetCompleted: ((String) -> Void)?
+    
     var appVersion: String {
-        print("버전: \(Constants.getAppVersion())")
         return Constants.getAppVersion()
     }
     
@@ -46,13 +47,17 @@ class SettingsViewModel {
     }
     
     func deleteToDoAll() {
-        let result = dataManager.deleteToDoAll()
-        
-        switch result {
-        case .success:
-            print("삭제 완료")
-        case .failure(let error):
-            print("삭제에 실패했습니다. 에러: \(error)")
+        dataManager.deleteToDoAll { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    print("삭제 완료")
+                    self?.onResetCompleted?("초기화가 완료되었습니다.")
+                case .failure(let error):
+                    print("삭제에 실패했습니다. 에러: \(error)")
+                    self?.onResetCompleted?("데이터 초기화에 실패했습니다. 다시 시도해주세요.")
+                }
+            }
         }
     }
 }

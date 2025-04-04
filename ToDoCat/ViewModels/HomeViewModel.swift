@@ -14,6 +14,7 @@ class HomeViewModel {
     private var selectedDate: Date = Date()
     private var filteredToDoList: [ToDoItem] = []
     private var hasToDoForSelectedDate: Bool = false
+    private var isLoading: Bool = false
     
     //MARK: - Callbacks
     var navigateToDetailView: (() -> Void)?
@@ -40,12 +41,20 @@ class HomeViewModel {
     
     //MARK: - Data Handling
     func loadData(completion: (() -> Void)? = nil) {
+        // 동시에 여러 번 호출되는 것 방지
+        guard !isLoading else {
+            completion?()
+            return
+        }
         
-        DispatchQueue.main.async { [weak self] in
+        isLoading = true
+        
+        dataManager.getAllToDos { [weak self] todos in
             guard let self = self else { return }
             
-            self.allToDoList = self.dataManager.getAllToDos()
+            self.allToDoList = todos
             self.updateFilteredList()
+            self.isLoading = false
             completion?()
         }
     }
@@ -56,9 +65,15 @@ class HomeViewModel {
     
     func updateSelectedDate(_ date: Date) {
         selectedDate = date
-        updateFilteredList()
         
-        onDateUpdate?()
+        // 비동기로 필터링된 목록 업데이트
+        dataManager.getToDos(forDate: date) { [weak self] todos in
+            guard let self = self else { return }
+            
+            self.filteredToDoList = todos
+            self.hasToDoForSelectedDate = !todos.isEmpty
+            self.onDateUpdate?()
+        }
     }
     
     func getFilteredToDoList() -> [ToDoItem] {
@@ -66,8 +81,12 @@ class HomeViewModel {
     }
     
     func hasEvent(for date: Date) -> Bool {
-        let todosForDate = dataManager.getToDos(forDate: date)
-        return !todosForDate.isEmpty
+        let calendar = Calendar.current
+        let targetDate = calendar.startOfDay(for: date)
+        
+        return allToDoList.contains { todo in
+            calendar.isDate(calendar.startOfDay(for: todo.date), inSameDayAs: targetDate)
+        }
     }
     
     func addTaskButtonTapped() {
@@ -75,19 +94,23 @@ class HomeViewModel {
     }
     
     func toDoCellTapped(index: IndexPath) {
-        //cellToDetailView?(filteredToDoList[index.row])
         let selectedToDo = filteredToDoList[index.row]
         cellToDetailView?(selectedToDo)
     }
 
-    func deleteToDo(id: UUID) -> Result<Void, Error> {
-        return dataManager.deleteToDo(id: id)
+    func deleteToDo(id: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+        dataManager.deleteToDo(id: id) { result in
+            completion(result)
+        }
     }
     
     // MARK: - Private Methods
     private func updateFilteredList() {
-        filteredToDoList = dataManager.getToDos(forDate: selectedDate)
-//        print(filteredToDoList)
-//        hasToDoForSelectedDate = !filteredToDoList.isEmpty
+        dataManager.getToDos(forDate: selectedDate) { [weak self] todos in
+            guard let self = self else { return }
+            
+            self.filteredToDoList = todos
+            self.hasToDoForSelectedDate = !todos.isEmpty
+        }
     }
 }

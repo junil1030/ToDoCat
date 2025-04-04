@@ -23,6 +23,7 @@ class DetailViewModel {
     var onDataUpdated: (() -> Void)?
     var onDataAdded: (() -> Void)?
     var onDismiss: (() -> Void)?
+    var onError: ((String) -> Void)?
     
     var content: String
     var titleImage: UIImage? {
@@ -77,54 +78,63 @@ class DetailViewModel {
         let newToDo = ToDoItem(
             id: UUID(),
             content: content,
-            image: titleImage!,
+            image: titleImage ?? UIImage(named: "DefaultImage")!,
             isCompleted: false,
             date: selectedDate,
             createdAt: Date(),
             updatedAt: Date()
         )
         
-        let result = dataManager.createToDo(todoItem: newToDo)
-
-        switch result {
-        case .success:
-            print("저장 완료")
-            onDataAdded?()
-        case .failure(let error):
-            print("저장에 실패했습니다. 에러: \(error)")
+        dataManager.createToDo(todoItem: newToDo) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    print("저장 완료")
+                    self?.onDataAdded?()
+                case .failure(let error):
+                    print("저장에 실패했습니다. 에러: \(error)")
+                    self?.onError?("저장에 실패했습니다. 다시 시도해주세요.")
+                }
+            }
         }
     }
     
     func updateData(content: String) {
-        guard var toDoItem = currentToDoItem else {
+        guard let toDoItem = currentToDoItem else {
             print("저장할 데이터가 존재하지 않습니다.")
+            onError?("저장할 데이터가 존재하지 않습니다.")
             return
         }
         
-        toDoItem.content = content
-        toDoItem.image = titleImage
-        toDoItem.updatedAt = Date()
+        // 업데이트할 이미지를 안전하게 처리
+        let updatedImage = titleImage ?? UIImage(named: "DefaultImage")
         
-        let result = dataManager.updateToDo(id: toDoItem.id, content: toDoItem.content, image: toDoItem.image)
-        
-        switch result {
-        case .success:
-            print("저장 완료")
-            onDataAdded?()
-        case .failure(let error):
-            print("저장에 실패했습니다. 에러: \(error)")
+        dataManager.updateToDo(id: toDoItem.id, content: content, image: updatedImage) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    print("업데이트 완료")
+                    self?.onDataAdded?()
+                case .failure(let error):
+                    print("업데이트에 실패했습니다. 에러: \(error)")
+                    self?.onError?("업데이트에 실패했습니다. 다시 시도해주세요.")
+                }
+            }
         }
     }
     
     func addImage(imageUrl: String, completion: @escaping (Bool) -> Void) {
         imageService.getImage(from: imageUrl) { [weak self] result in
-            switch result {
-            case .success(let image):
-                self?.titleImage = image
-                completion(true)
-            case .failure(let error):
-                print("이미지 로드 실패: \(error)")
-                completion(false)
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let image):
+                    self?.titleImage = image
+                    completion(true)
+                case .failure(let error):
+                    print("이미지 로드 실패: \(error)")
+                    self?.onError?("이미지를 불러올 수 없습니다. 다른 이미지를 시도해보세요.")
+                    completion(false)
+                }
             }
         }
     }
