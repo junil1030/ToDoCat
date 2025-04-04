@@ -18,7 +18,6 @@ class MainTabBarCoordinator: Coordinator {
     }
     
     func start() {
-        //print("MainTabBarCoordinator - start() 호출됨")
         let homeNav = UINavigationController()
         let searchNav = UINavigationController()
         let settingsNav = UINavigationController()
@@ -43,12 +42,7 @@ class MainTabBarCoordinator: Coordinator {
         searchNav.tabBarItem = UITabBarItem(title: "검색", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         settingsNav.tabBarItem = UITabBarItem(title: "설정", image: UIImage(systemName: "gear"), tag: 2)
         
-        
-        //print("✅ 탭바 컨트롤러에 네비게이션 컨트롤러 추가 전 tabBarController.viewControllers: \(String(describing: tabBarController.viewControllers))")
-        
         tabBarController.viewControllers = [homeNav, searchNav, settingsNav]
-        
-        //print("✅ 탭바 컨트롤러에 네비게이션 컨트롤러 추가 후 tabBarController.viewControllers: \(String(describing: tabBarController.viewControllers))")
     }
     
 
