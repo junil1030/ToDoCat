@@ -30,15 +30,10 @@ class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupNavigationBar()
+        
         setupDelegates()
         setupBindings()
     }
-    
-//    func setViewModel(_ viewModel: SearchViewModel) {
-//        self.searchViewModel = viewModel
-//    }
     
     deinit {
         searchTimer?.invalidate()
@@ -51,10 +46,6 @@ class SearchViewController: UIViewController {
         searchViewModel.searchResult.removeAll()
         searchViewModel.currentToDoItem = nil
         searchView.tableView.reloadData()
-    }
-    
-    private func setupNavigationBar() {
-        
     }
     
     private func setupDelegates() {

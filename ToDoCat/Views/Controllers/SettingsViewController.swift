@@ -33,10 +33,6 @@ class SettingsViewController: UIViewController {
         setupBindings()
     }
     
-//    func setViewModel(_ viewModel: SettingsViewModel) {
-//        self.settingsViewModel = viewModel
-//    }
-    
     private func setupDelegates() {
         settingsView.tableView.delegate = self
         settingsView.tableView.dataSource = self
@@ -48,6 +44,7 @@ class SettingsViewController: UIViewController {
         settingsViewModel.openMail = { [weak self] in self?.openMail() }
         settingsViewModel.showReview = { [weak self] in self?.showReview() }
         settingsViewModel.showOpenSourceLicenses = { [weak self] in self?.showOpenSourceLicenses() }
+        settingsViewModel.onResetCompleted = { [weak self] resultString in self?.view.makeToast(resultString) }
     }
     
     private func showResetAlert() {

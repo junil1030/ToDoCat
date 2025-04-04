@@ -20,7 +20,6 @@ class HomeViewController: UIViewController {
     
     init(viewModel: HomeViewModel) {
         self.homeViewModel = viewModel
-        //print("HomeViewController - init() 호출됨")
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -42,7 +41,7 @@ class HomeViewController: UIViewController {
         homeView.calendarView.selectDate(Date())
         
         homeViewModel.loadData() { [weak self] in
-            self?.refreshData()
+            self?.refreshData(reloadCalendar: true)
         }
     }
     
@@ -125,7 +124,6 @@ class HomeViewController: UIViewController {
 extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print("✅ calendar:didSelect 호출됨: \(date.toString())")
         homeViewModel.updateSelectedDate(date)
     }
     
@@ -182,15 +180,17 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             let todo = cachedFilteredToDoList[indexPath.row]
             
-            let result = homeViewModel.deleteToDo(id: todo.id)
-            
-            switch result {
-            case .success:
+            homeViewModel.deleteToDo(id: todo.id) { [weak self] result in
+                guard let self = self else { return }
+                
                 DispatchQueue.main.async {
-                    self.refreshData()
+                    switch result {
+                    case .success:
+                        self.refreshData()
+                    case .failure:
+                        self.view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
+                    }
                 }
-            case .failure:
-                view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
             }
         }
     }
@@ -201,25 +201,23 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             
             let todo = self.cachedFilteredToDoList[indexPath.row]
             
-            let result = self.homeViewModel.deleteToDo(id: todo.id)
-            
-            switch result {
-            case .success:
+            self.homeViewModel.deleteToDo(id: todo.id) { result in
                 DispatchQueue.main.async {
-                    self.refreshData()
+                    switch result {
+                    case .success:
+                        self.refreshData()
+                        completionHandler(true)
+                    case .failure:
+                        self.view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
+                        completionHandler(false)
+                    }
                 }
-                completionHandler(true)
-            case .failure:
-                self.view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
-                completionHandler(false)
             }
         }
         
-        // 삭제 버튼 커스터마이징 (옵션)
         deleteAction.backgroundColor = .red
         deleteAction.image = UIImage(systemName: "trash")
         
-        // 스와이프 액션 구성
         let swipeConfiguration = UISwipeActionsConfiguration(actions: [deleteAction])
         return swipeConfiguration
     }

@@ -57,7 +57,6 @@ class DetailViewController: UIViewController {
         }
         
         detailViewModel.onDataAdded = { [weak self] in
-            // 토스트 메세지 띄워보는 거?
             self?.detailViewModel.onDismiss?()
         }
         
@@ -65,6 +64,10 @@ class DetailViewController: UIViewController {
             DispatchQueue.main.async {
                 self?.detailView.updateImage(image: image)
             }
+        }
+        
+        detailViewModel.onError = { [weak self] error in
+            self?.view.makeToast(error)
         }
     }
     
