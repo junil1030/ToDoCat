@@ -47,6 +47,12 @@ PODS:
   - Realm/Headers (20.0.1)
   - RealmSwift (20.0.1):
     - Realm (= 20.0.1)
+  - RxCocoa (6.9.0):
+    - RxRelay (= 6.9.0)
+    - RxSwift (= 6.9.0)
+  - RxRelay (6.9.0):
+    - RxSwift (= 6.9.0)
+  - RxSwift (6.9.0)
   - SnapKit (5.7.1)
   - Toast-Swift (5.1.1)
 
@@ -56,6 +62,8 @@ DEPENDENCIES:
   - FSCalendar
   - IQKeyboardManagerSwift
   - RealmSwift
+  - RxCocoa (= 6.9.0)
+  - RxSwift (= 6.9.0)
   - SnapKit (~> 5.7.0)
   - Toast-Swift (~> 5.1.1)
 
@@ -74,6 +82,9 @@ SPEC REPOS:
     - IQTextView
     - Realm
     - RealmSwift
+    - RxCocoa
+    - RxRelay
+    - RxSwift
     - SnapKit
     - Toast-Swift
 
@@ -91,9 +102,12 @@ SPEC CHECKSUMS:
   IQTextView: ae13b4922f22e6f027f62c557d9f4f236b19d5c7
   Realm: 9572204903ef28caeb3c03bb30c1147f354ee3e7
   RealmSwift: d230b44017a55a1ba97de6a944da1fe3bedb92b5
+  RxCocoa: ac16414696ae706516be3e1ab00fcce5bdc9be8a
+  RxRelay: 6b0c930e5cef57d5fe2032571e5e65b78e3cbdb1
+  RxSwift: 31649ace6aceeb422e16ff71c60804f9c3281ed9
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
   Toast-Swift: 7a03a532afe3a560d4044bc7c237e2864d295173
 
-PODFILE CHECKSUM: 7c8e2f9ad1253adde705badb0977e051836f198c
+PODFILE CHECKSUM: 0914ad071e84736b590eb1b396a628a7ae57f2f6
 
 COCOAPODS: 1.16.2

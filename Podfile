@@ -22,4 +22,6 @@ target 'ToDoCat' do
   pod 'Alamofire'
   pod 'AcknowList'
   pod 'Toast-Swift', '~> 5.1.1'
+  pod 'RxSwift', '6.9.0'
+  pod 'RxCocoa', '6.9.0'
 end
