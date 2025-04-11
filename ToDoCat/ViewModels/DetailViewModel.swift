@@ -4,7 +4,8 @@
 //
 //  Created by 서준일 on 3/16/25.
 //
-import UIKit
+import Foundation
+import RxSwift
 
 class DetailViewModel {
     
