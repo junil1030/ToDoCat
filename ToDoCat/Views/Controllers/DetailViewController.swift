@@ -5,12 +5,16 @@
 //  Created by 서준일 on 3/14/25.
 //
 import UIKit
+import Toast_Swift
 import PhotosUI
+import RxSwift
 
 class DetailViewController: UIViewController {
     
     private let detailView: DetailView
     private var detailViewModel: DetailViewModel
+    
+    private let disposeBag = DisposeBag()
     
     init(viewModel: DetailViewModel) {
         self.detailViewModel = viewModel
@@ -94,14 +98,24 @@ class DetailViewController: UIViewController {
     @objc private func getCatButtonTapped() {
         self.view.makeToastActivity(.center)
         
-        detailViewModel.addImage(imageUrl: Constants.getCatImageUrl(says: nil)) { [weak self] success in
-            DispatchQueue.main.async {
+//        detailViewModel.addImage(imageUrl: Constants.getCatImageUrl(says: nil)) { [weak self] success in
+//            DispatchQueue.main.async {
+//                self?.view.hideToastActivity()
+//                if !success {
+//                    self?.showToast(message: "이미지를 불러오지 못했습니다.")
+//                }
+//            }
+//        }
+        
+        detailViewModel.rx_addImage(imageUrl: Constants.getCatImageUrl(says: nil))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] success in
                 self?.view.hideToastActivity()
                 if !success {
                     self?.showToast(message: "이미지를 불러오지 못했습니다.")
                 }
-            }
-        }
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc private func getDefaultImageButtonTapped() {
