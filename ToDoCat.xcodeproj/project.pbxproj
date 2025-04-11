@@ -32,6 +32,8 @@
 		F94C5A3E2D81B48000BD8B70 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C5A342D81B48000BD8B70 /* HomeViewController.swift */; };
 		F94C5A472D81BA1800BD8B70 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C5A462D81BA1800BD8B70 /* HomeView.swift */; };
 		F94C5A492D81BDD600BD8B70 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C5A482D81BDD600BD8B70 /* MainTabBarController.swift */; };
+		F965CF6D2DA8DC4E002F02E2 /* ImageService+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = F965CF6C2DA8DC41002F02E2 /* ImageService+Rx.swift */; };
+		F965CF6F2DA8DE2E002F02E2 /* ImageRepository+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = F965CF6E2DA8DE27002F02E2 /* ImageRepository+Rx.swift */; };
 		F980AAD82D9C2F1E00E91E97 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F980AAD72D9C2F1700E91E97 /* AppCoordinator.swift */; };
 		F980AADA2D9C35FF00E91E97 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F980AAD92D9C35F500E91E97 /* HomeCoordinator.swift */; };
 		F980AADC2D9C361500E91E97 /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F980AADB2D9C360F00E91E97 /* SearchCoordinator.swift */; };
@@ -79,6 +81,8 @@
 		F94C5A342D81B48000BD8B70 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		F94C5A462D81BA1800BD8B70 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		F94C5A482D81BDD600BD8B70 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		F965CF6C2DA8DC41002F02E2 /* ImageService+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageService+Rx.swift"; sourceTree = "<group>"; };
+		F965CF6E2DA8DE27002F02E2 /* ImageRepository+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageRepository+Rx.swift"; sourceTree = "<group>"; };
 		F96A11DD2D81B2CE0083168A /* ToDoCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F980AAD72D9C2F1700E91E97 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		F980AAD92D9C35F500E91E97 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
@@ -158,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				F92834BE2D8D5A1A001B0EA7 /* ImageRepository.swift */,
+				F965CF6E2DA8DE27002F02E2 /* ImageRepository+Rx.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -166,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				F92834C02D8D5BAD001B0EA7 /* ImageService.swift */,
+				F965CF6C2DA8DC41002F02E2 /* ImageService+Rx.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -437,9 +443,11 @@
 				F9D71D472D8E8D9700B74D0D /* SettingsView.swift in Sources */,
 				F94C5A3B2D81B48000BD8B70 /* AppDelegate.swift in Sources */,
 				F9134EC72D8C01B60056CA2E /* SearchView.swift in Sources */,
+				F965CF6F2DA8DE2E002F02E2 /* ImageRepository+Rx.swift in Sources */,
 				F980AADC2D9C361500E91E97 /* SearchCoordinator.swift in Sources */,
 				F9224C942D82A8C4009E5220 /* HomeViewModel.swift in Sources */,
 				F94655CC2D912424007EE286 /* SettingsOptionModel.swift in Sources */,
+				F965CF6D2DA8DC4E002F02E2 /* ImageService+Rx.swift in Sources */,
 				F92834BF2D8D5A27001B0EA7 /* ImageRepository.swift in Sources */,
 				F92834BD2D8D5998001B0EA7 /* ImageEntity.swift in Sources */,
 				F94655CE2D912456007EE286 /* SettingsViewModel.swift in Sources */,
