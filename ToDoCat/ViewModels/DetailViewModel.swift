@@ -140,3 +140,21 @@ class DetailViewModel {
         }
     }
 }
+
+extension DetailViewModel {
+    
+    func rx_addImage(imageUrl: String) -> Single<Bool> {
+        return Single.create { [weak self] single in
+            guard let self = self else {
+                single(.success(false))
+                return Disposables.create()
+            }
+            
+            self.addImage(imageUrl: imageUrl) { success in
+                single(.success(success))
+            }
+            
+            return Disposables.create()
+        }
+    }
+}
