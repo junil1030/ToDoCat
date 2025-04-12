@@ -13,7 +13,6 @@ class HomeViewModel {
     private var allToDoList: [ToDoItem] = []
     private var selectedDate: Date = Date()
     private var filteredToDoList: [ToDoItem] = []
-    private var hasToDoForSelectedDate: Bool = false
     private var isLoading: Bool = false
     
     //MARK: - Callbacks
@@ -71,7 +70,6 @@ class HomeViewModel {
             guard let self = self else { return }
             
             self.filteredToDoList = todos
-            self.hasToDoForSelectedDate = !todos.isEmpty
             self.onDateUpdate?()
         }
     }
@@ -110,7 +108,6 @@ class HomeViewModel {
             guard let self = self else { return }
             
             self.filteredToDoList = todos
-            self.hasToDoForSelectedDate = !todos.isEmpty
         }
     }
 }
