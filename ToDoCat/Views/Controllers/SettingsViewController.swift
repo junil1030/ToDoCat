@@ -8,11 +8,14 @@
 import UIKit
 import AcknowList
 import MessageUI
+import RxSwift
+import RxCocoa
 
 class SettingsViewController: UIViewController {
     
     private let settingsView: SettingsView
     private var settingsViewModel: SettingsViewModel
+    private let disposeBag = DisposeBag()
     
     init(viewModel: SettingsViewModel) {
         self.settingsViewModel = viewModel
@@ -40,47 +43,71 @@ class SettingsViewController: UIViewController {
     }
     
     private func setupBindings() {
-        settingsViewModel.showResetAlert = { [weak self] in self?.showResetAlert() }
-        settingsViewModel.openMail = { [weak self] in self?.openMail() }
-        settingsViewModel.showReview = { [weak self] in self?.showReview() }
-        settingsViewModel.showOpenSourceLicenses = { [weak self] in self?.showOpenSourceLicenses() }
-        settingsViewModel.onResetCompleted = { [weak self] resultString in self?.view.makeToast(resultString) }
+        
+        // 알림창
+        settingsViewModel.showAlert
+            .subscribe(onNext: { [weak self] alert in
+                self?.present(alert, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        // 초기화 결과 토스트 메세지
+        settingsViewModel.resetResult
+            .subscribe(onNext: { [weak self] message in
+                self?.view.makeToast(message)
+            })
+            .disposed(by: disposeBag)
+        
+        // 리뷰 페이지 열기
+        settingsViewModel.reviewAction
+            .subscribe(onNext: { [weak self] _ in
+                guard let reviceURL = self?.settingsViewModel.getReviewURL() else { return }
+                UIApplication.shared.open(reviceURL, options: [:], completionHandler: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        // 메일 보내기
+        settingsViewModel.openMailAction
+            .subscribe(onNext: { [weak self] _ in
+                self?.openMail()
+            })
+            .disposed(by: disposeBag)
+        
+        // 오픈소스 표시
+        settingsViewModel.openLicensesAction
+            .subscribe(onNext: { [weak self] _ in
+                let vc = AcknowListViewController()
+                vc.navigationItem.title = "오픈소스 라이브러리"
+                self?.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+//        settingsViewModel.showResetAlert = { [weak self] in self?.showResetAlert() }
+//        settingsViewModel.openMail = { [weak self] in self?.openMail() }
+//        settingsViewModel.showReview = { [weak self] in self?.showReview() }
+//        settingsViewModel.showOpenSourceLicenses = { [weak self] in self?.showOpenSourceLicenses() }
+//        settingsViewModel.onResetCompleted = { [weak self] resultString in self?.view.makeToast(resultString) }
     }
     
-    private func showResetAlert() {
-        let alert = UIAlertController(title: "데이터 초기화 시 기존 데이터는 전부 사라집니다."
-                                      , message: "데이터 초기화를 진행할까요?"
-                                      , preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { _ in
-            self.settingsViewModel.deleteToDoAll()
-        }))
-        present(alert, animated: true)
-    }
+//    private func showResetAlert() {
+//        let alert = UIAlertController(title: "데이터 초기화 시 기존 데이터는 전부 사라집니다."
+//                                      , message: "데이터 초기화를 진행할까요?"
+//                                      , preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+//        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { _ in
+//            self.settingsViewModel.deleteToDoAll()
+//        }))
+//        present(alert, animated: true)
+//    }
     
     private func openMail() {
         if MFMailComposeViewController.canSendMail() {
             let vc = MFMailComposeViewController()
             vc.mailComposeDelegate = self
             
-            let bodyString = """
-                                                 문의 사항 및 의견을 작성해주세요.
-                                                 
-                                                 
-                                                 
-                                                 
-                                                 -------------------
-                                                 
-                                                 Device Model : \(Constants.getDeviceModelName())
-                                                 Device OS : \(UIDevice.current.systemVersion)
-                                                 App Version : \(Constants.getAppVersion())
-                                                 
-                                                 -------------------
-                                                 """
-            
-            vc.setToRecipients(["dccrdseo@naver.com"])
-            vc.setSubject("[\(Constants.engTitle)] 문의")
-            vc.setMessageBody(bodyString, isHTML: false)
+            let mailSettings = settingsViewModel.getMailSettings()
+            vc.setToRecipients(mailSettings.recipients)
+            vc.setSubject(mailSettings.subject)
+            vc.setMessageBody(mailSettings.body, isHTML: false)
             
             self.present(vc, animated: true, completion: nil)
         } else {
@@ -91,33 +118,28 @@ class SettingsViewController: UIViewController {
         }
     }
     
-    private func showReview() {
-        if let reviewUrl = URL(string: "itms-apps://itunes.apple.com/app/id6743777075?action=write-review") {
-            UIApplication.shared.open(reviewUrl, options: [:], completionHandler: nil)
-        }
-    }
-    
-    private func showOpenSourceLicenses() {
-        let vc = AcknowListViewController()
-        vc.navigationItem.title = "오픈소스 라이브러리"
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+//    private func showReview() {
+//        if let reviewUrl = URL(string: "itms-apps://itunes.apple.com/app/id6743777075?action=write-review") {
+//            UIApplication.shared.open(reviewUrl, options: [:], completionHandler: nil)
+//        }
+//    }
+//    
+//    private func showOpenSourceLicenses() {
+//        let vc = AcknowListViewController()
+//        vc.navigationItem.title = "오픈소스 라이브러리"
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    }
 }
 
-//MARK: - UITableViewDelegate
-extension SettingsViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let option = settingsViewModel.items[indexPath.section][indexPath.row]
-        option.action?()
-    }
-}
 
-//MARK: - UITableViewDataSource
-extension SettingsViewController: UITableViewDataSource {
+// MARK: - UITableViewDelegate, UITableViewDataSource
+// 테이블 뷰의 내용이 고정적이고 입력에 따라 변화하지 않기 때문에
+// Rx로 구독하는 것보다 델리게이트를 사용하는 것이 효율적이라 판단
+extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return settingsViewModel.sections.count
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settingsViewModel.items[section].count
     }
@@ -135,6 +157,12 @@ extension SettingsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return settingsViewModel.sections[section]
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let option = settingsViewModel.items[indexPath.section][indexPath.row]
+        option.action?()
     }
 }
 
