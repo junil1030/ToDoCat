@@ -21,7 +21,7 @@ class HomeViewModel {
     var onDateUpdate: (() -> Void)?
     var onToDoListUpdated: (() -> Void)?
     
-    //MARK: - Initaliztion
+    //MARK: - Initialization
     init(dataManager: ToDoDataFetchable & ToDoDataDeletable & ToDoDataObserver) {
         self.dataManager = dataManager
         setupBindings()

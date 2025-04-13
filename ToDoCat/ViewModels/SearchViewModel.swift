@@ -34,7 +34,7 @@ class SearchViewModel {
     // 화면 이동 클로저
     var cellToDetailView: ((ToDoItem) -> Void)?
     
-    //MARK: - Initaliztion
+    //MARK: - Initialization
     init(dataManager: ToDoDataSearchable) {
         self.dataManager = dataManager
         setupBindings()
