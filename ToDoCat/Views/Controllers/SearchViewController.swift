@@ -15,7 +15,6 @@ class SearchViewController: UIViewController {
     private var searchViewModel: SearchViewModel
     private let disposeBag = DisposeBag()
     
-    //var searchTimer: Timer?
     
     init(viewModel: SearchViewModel) {
         self.searchViewModel = viewModel
@@ -34,30 +33,14 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        setupDelegates()
         setupBindings()
     }
-    
-//    deinit {
-//        searchTimer?.invalidate()
-//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         searchViewModel.clearSearch()
-//        searchView.searchBar.text = ""
-//        searchViewModel.searchResult.removeAll()
-//        searchViewModel.currentToDoItem = nil
-//        searchView.tableView.reloadData()
     }
-    
-//    private func setupDelegates() {
-//        searchView.searchBar.delegate = self
-//        
-//        searchView.tableView.delegate = self
-//        searchView.tableView.dataSource = self
-    //    }
     
     private func setupBindings() {
         // 검색창 바인딩
@@ -96,64 +79,10 @@ class SearchViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        // 선택된 아이템 처리 (이전의 cellToDetailView 대체)
-        // 여기서는 코디네이터 패턴을 가정하고, 해당 코디네이터로 이벤트 전달
         searchViewModel.selectedItem
             .subscribe(onNext: { [weak self] todoItem in
-                // 예: self?.coordinator.showDetail(for: todoItem)
-                // 또는 임시 구현:
                 self?.searchViewModel.cellToDetailView?(todoItem)
             })
             .disposed(by: disposeBag)
-        //        searchViewModel.onDataChanged = { [weak self] in
-        //            self?.searchView.tableView.reloadData()
-        //        }
     }
 }
-
-//extension SearchViewController: UISearchBarDelegate {
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        guard let keyword = searchBar.text else { return }
-//        searchViewModel.search(keyword: keyword)
-//    }
-//    
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        searchTimer?.invalidate()
-//        
-//        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] timer in
-//            guard let self = self else { return }
-//            self.searchViewModel.search(keyword: searchText)
-//        }
-//    }
-//}
-//
-//extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return searchViewModel.searchResult.count
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(
-//            withIdentifier: ToDoTableViewCell.identifier,
-//            for: indexPath
-//        ) as? ToDoTableViewCell else {
-//            return UITableViewCell()
-//        }
-//        
-//        let entry = searchViewModel.searchResult[indexPath.row]
-//        cell.configure(with: entry)
-//        cell.accessoryType = .disclosureIndicator
-//        
-//        return cell
-//    }
-//    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: true)
-//        
-//        self.searchViewModel.toDoCellTapped(index: indexPath)
-//    }
-//    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 84
-//    }
-//}
