@@ -210,10 +210,10 @@
 		F94C5A402D81B54300BD8B70 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				F94655CD2D91244D007EE286 /* SettingsViewModel.swift */,
+				F9224C932D82A8BA009E5220 /* HomeViewModel.swift */,
 				F9134ECA2D8C575D0056CA2E /* SearchViewModel.swift */,
 				F916B30A2D86CC09006C4EE9 /* DetailViewModel.swift */,
-				F9224C932D82A8BA009E5220 /* HomeViewModel.swift */,
+				F94655CD2D91244D007EE286 /* SettingsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
