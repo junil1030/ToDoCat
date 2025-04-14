@@ -139,7 +139,6 @@ class DetailViewModel {
             }
     }
     
-    // 매개변수 입력안하고 바인딩 걸어서 가져오게끔 하고싶은디
     private func createToDoItem(content: String) -> Observable<Result<Void,Error>> {
         return Observable.create { [weak self] observer in
             guard let self = self else {
