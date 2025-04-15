@@ -130,17 +130,6 @@ class HomeViewController: UIViewController {
                 self?.homeView.calendarView.reloadData()
             })
             .disposed(by: disposeBag)
-//        homeViewModel.onDateUpdate = { [weak self] in
-//            DispatchQueue.main.async {
-//                self?.refreshData()
-//            }
-//        }
-//        
-//        homeViewModel.onToDoListUpdated = { [weak self] in
-//            DispatchQueue.main.async {
-//                self?.refreshData(reloadCalendar: true)
-//            }
-//        }
     }
     
     @objc private func addNewEntry() {
@@ -169,32 +158,6 @@ class HomeViewController: UIViewController {
             homeViewModel.navigateToDetailView?()
         }
     }
-    
-//    private func refreshData(reloadCalendar: Bool = false) {
-//        if isRefreshing { return }
-//        isRefreshing = true
-//        
-//        // 백그라운드 스레드 사용 제거, 메인 스레드에서 직접 실행
-//        DispatchQueue.main.async { [weak self] in
-//            guard let self = self else { return }
-//            
-//            let filteredList = self.homeViewModel.getFilteredToDoList()
-//            self.cachedFilteredToDoList = filteredList
-//            self.updateUI(reloadCalendar: reloadCalendar)
-//            self.isRefreshing = false
-//        }
-//    }
-//    
-//    private func updateUI(reloadCalendar: Bool = false) {
-//        homeView.toDoTableView.showEmptyState(cachedFilteredToDoList.isEmpty)
-//       
-//        // 캘린더는 필요할 때만 리로드
-//        if reloadCalendar {
-//            homeView.calendarView.reloadData()
-//        }
-//        
-//        homeView.toDoTableView.reloadData()
-//    }
 }
 
 //MARK: - FSCalendar Delegate & DataSource
@@ -256,25 +219,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            let todo = cachedFilteredToDoList[indexPath.row]
-//            
-//            homeViewModel.deleteToDo(id: todo.id) { [weak self] result in
-//                guard let self = self else { return }
-//                
-//                DispatchQueue.main.async {
-//                    switch result {
-//                    case .success:
-//                        self.refreshData()
-//                    case .failure:
-//                        self.view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] (action, view, completionHandler) in
@@ -289,22 +233,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             let todo = items[indexPath.row]
             self.homeViewModel.deleteItemTrigger.accept(todo.id)
             completionHandler(true)
-
-            
-//            let todo = self.cachedFilteredToDoList[indexPath.row]
-//
-//            self.homeViewModel.deleteToDo(id: todo.id) { result in
-//                DispatchQueue.main.async {
-//                    switch result {
-//                    case .success:
-//                        self.refreshData()
-//                        completionHandler(true)
-//                    case .failure:
-//                        self.view.makeToast("삭제에 실패했습니다. 다시 시도해주세요.")
-//                        completionHandler(false)
-//                    }
-//                }
-//            }
         }
         
         deleteAction.backgroundColor = .red
@@ -321,7 +249,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         homeViewModel.selectItemTrigger.accept(indexPath)
-//        self.homeViewModel.toDoCellTapped(index: indexPath)
     }
 }
 

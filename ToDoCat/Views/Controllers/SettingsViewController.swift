@@ -81,23 +81,7 @@ class SettingsViewController: UIViewController {
                 self?.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-//        settingsViewModel.showResetAlert = { [weak self] in self?.showResetAlert() }
-//        settingsViewModel.openMail = { [weak self] in self?.openMail() }
-//        settingsViewModel.showReview = { [weak self] in self?.showReview() }
-//        settingsViewModel.showOpenSourceLicenses = { [weak self] in self?.showOpenSourceLicenses() }
-//        settingsViewModel.onResetCompleted = { [weak self] resultString in self?.view.makeToast(resultString) }
     }
-    
-//    private func showResetAlert() {
-//        let alert = UIAlertController(title: "데이터 초기화 시 기존 데이터는 전부 사라집니다."
-//                                      , message: "데이터 초기화를 진행할까요?"
-//                                      , preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-//        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { _ in
-//            self.settingsViewModel.deleteToDoAll()
-//        }))
-//        present(alert, animated: true)
-//    }
     
     private func openMail() {
         if MFMailComposeViewController.canSendMail() {
@@ -117,18 +101,6 @@ class SettingsViewController: UIViewController {
             self.present(sendMailErrorAlert, animated: true, completion: nil)
         }
     }
-    
-//    private func showReview() {
-//        if let reviewUrl = URL(string: "itms-apps://itunes.apple.com/app/id6743777075?action=write-review") {
-//            UIApplication.shared.open(reviewUrl, options: [:], completionHandler: nil)
-//        }
-//    }
-//    
-//    private func showOpenSourceLicenses() {
-//        let vc = AcknowListViewController()
-//        vc.navigationItem.title = "오픈소스 라이브러리"
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
 }
 
 
