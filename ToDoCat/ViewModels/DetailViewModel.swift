@@ -128,25 +128,15 @@ class DetailViewModel {
     }
     
     private func loadImage(from url: String) -> Observable<UIImage?> {
-        return Observable.create { [weak self] observer in
-            guard let self = self else {
-                observer.onNext(nil)
-                observer.onCompleted()
-                return Disposables.create()
+        return imageService.getImage(from: url)
+            .asObservable()
+            .map { image -> UIImage in
+                return image
             }
-            
-            self.imageService.getImage(from: url) { result in
-                switch result {
-                case .success(let image):
-                    observer.onNext(image)
-                case .failure:
-                    observer.onNext(nil)
-                }
-                observer.onCompleted()
+            .catch { error -> Observable<UIImage?> in
+                print("Image 로딩 에러: \(error)")
+                return .just(UIImage(named: "DefaultImage"))
             }
-            
-            return Disposables.create()
-        }
     }
     
     // 매개변수 입력안하고 바인딩 걸어서 가져오게끔 하고싶은디
