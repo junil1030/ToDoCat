@@ -17,8 +17,6 @@ class HomeViewController: UIViewController {
     private let homeView = HomeView()
     private var homeViewModel: HomeViewModel
     private let disposeBag = DisposeBag()
-    
-    private var cachedFilteredToDoList: [ToDoItem] = []
     private var isRefreshing = false // 중복 리프레시 방지용
     
     init(viewModel: HomeViewModel) {
@@ -43,10 +41,6 @@ class HomeViewController: UIViewController {
         
         homeView.calendarView.selectDate(Date())
         homeViewModel.loadDataTrigger.accept(())
-        
-//        homeViewModel.loadData() { [weak self] in
-//            self?.refreshData(reloadCalendar: true)
-//        }
     }
     
     //MARK: - Setup Methods
@@ -192,7 +186,6 @@ extension HomeViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalend
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return cachedFilteredToDoList.count
         return homeViewModel.filteredToDoItems.value.count
     }
     
@@ -208,7 +201,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         guard indexPath.row < items.count else { return cell }
         
         let entry = items[indexPath.row]
-//        let entry = cachedFilteredToDoList[indexPath.row]
         cell.configure(with: entry)
         cell.accessoryType = .disclosureIndicator
         
