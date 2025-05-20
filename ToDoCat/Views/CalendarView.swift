@@ -29,9 +29,32 @@ class CalendarView: UIView {
         calendar.scrollDirection = .horizontal
         calendar.pagingEnabled = true
         calendar.allowsMultipleSelection = false
+        calendar.appearance.headerMinimumDissolvedAlpha = 0.0
         calendar.clipsToBounds = true
-        calendar.translatesAutoresizingMaskIntoConstraints = false
         return calendar
+    }()
+    
+    private let datePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .automatic
+        picker.backgroundColor = .clear
+        picker.tintColor = UIColor(named: "CalendarColor")
+        return picker
+    }()
+    
+    private let dateSelectButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "calendar"), for: .normal)
+        button.tintColor = UIColor(named: "CalendarColor")
+        return button
+    }()
+    
+    private let todayButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "calendar.badge.clock"), for: .normal)
+        button.tintColor = UIColor(named: "CalendarColor")
+        return button
     }()
     
     private var calendarHeightConstraint: Constraint?
@@ -44,6 +67,7 @@ class CalendarView: UIView {
         super.init(frame: frame)
         setupUI()
         setupGesture()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
@@ -54,11 +78,27 @@ class CalendarView: UIView {
         backgroundColor = UIColor(named: "BackgroundColor")
         
         addSubview(calendarView)
+        addSubview(todayButton)
+        addSubview(datePicker)
         
         calendarView.scope = .month
+        
         calendarView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             calendarHeightConstraint = make.height.equalTo(monthHeight).constraint
+        }
+        
+        todayButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-16)
+            make.top.equalToSuperview().offset(16)
+            make.width.height.equalTo(24)
+        }
+        
+        datePicker.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.top.equalToSuperview().offset(5)
+            make.width.equalTo(130)
+            make.height.equalTo(35)
         }
     }
     
@@ -66,6 +106,23 @@ class CalendarView: UIView {
         let panGestureRecognizer = UIPanGestureRecognizer(target: self
                                                           , action: #selector(panGestureHandler))
         addGestureRecognizer(panGestureRecognizer)
+    }
+    
+    private func setupActions() {
+        todayButton.addTarget(self, action: #selector(todayButtonTapped), for: .touchUpInside)
+        
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+    }
+    
+    @objc private func todayButtonTapped() {
+        print("todayButton")
+        selectDate(Date())
+    }
+    
+    @objc private func datePickerValueChanged() {
+        print("datePickerValueChanged")
+        selectDate(datePicker.date)
+        
     }
     
     @objc func panGestureHandler(gesture: UIPanGestureRecognizer) {
