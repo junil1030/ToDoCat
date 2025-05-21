@@ -39,6 +39,9 @@
 		F980AADE2D9C361E00E91E97 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F980AADD2D9C361800E91E97 /* SettingsCoordinator.swift */; };
 		F980AAE02D9C385500E91E97 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F980AADF2D9C384D00E91E97 /* MainTabBarCoordinator.swift */; };
 		F980AAE22D9C400C00E91E97 /* DetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F980AAE12D9C400800E91E97 /* DetailCoordinator.swift */; };
+		F994DE5C2DDDA464001A72C9 /* SettingsSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F994DE5B2DDDA464001A72C9 /* SettingsSwiftUIView.swift */; };
+		F994DE5E2DDDA5C1001A72C9 /* SettingsViewModelAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F994DE5D2DDDA5BA001A72C9 /* SettingsViewModelAdapter.swift */; };
+		F994DE602DDDA6AD001A72C9 /* SettingsSwiftUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F994DE5F2DDDA6AD001A72C9 /* SettingsSwiftUIViewController.swift */; };
 		F99B3E8B2D83D71600879AB0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B3E8A2D83D71300879AB0 /* Constants.swift */; };
 		F99B3E8D2D83EC2D00879AB0 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B3E8C2D83EC2D00879AB0 /* DetailView.swift */; };
 		F99B3E8F2D83F30900879AB0 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B3E8E2D83F30900879AB0 /* DetailViewController.swift */; };
@@ -88,6 +91,9 @@
 		F980AADD2D9C361800E91E97 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		F980AADF2D9C384D00E91E97 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		F980AAE12D9C400800E91E97 /* DetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCoordinator.swift; sourceTree = "<group>"; };
+		F994DE5B2DDDA464001A72C9 /* SettingsSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwiftUIView.swift; sourceTree = "<group>"; };
+		F994DE5D2DDDA5BA001A72C9 /* SettingsViewModelAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelAdapter.swift; sourceTree = "<group>"; };
+		F994DE5F2DDDA6AD001A72C9 /* SettingsSwiftUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwiftUIViewController.swift; sourceTree = "<group>"; };
 		F99B3E8A2D83D71300879AB0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F99B3E8C2D83EC2D00879AB0 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		F99B3E8E2D83F30900879AB0 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -207,6 +213,7 @@
 		F94C5A402D81B54300BD8B70 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				F994DE5D2DDDA5BA001A72C9 /* SettingsViewModelAdapter.swift */,
 				F9224C932D82A8BA009E5220 /* HomeViewModel.swift */,
 				F9134ECA2D8C575D0056CA2E /* SearchViewModel.swift */,
 				F916B30A2D86CC09006C4EE9 /* DetailViewModel.swift */,
@@ -223,6 +230,7 @@
 				F99B3E8E2D83F30900879AB0 /* DetailViewController.swift */,
 				F94C5A482D81BDD600BD8B70 /* MainTabBarController.swift */,
 				F94655CF2D912557007EE286 /* SettingsViewController.swift */,
+				F994DE5F2DDDA6AD001A72C9 /* SettingsSwiftUIViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -237,6 +245,7 @@
 				F99B3E8C2D83EC2D00879AB0 /* DetailView.swift */,
 				F9134EC62D8C01B60056CA2E /* SearchView.swift */,
 				F9D71D462D8E8D9700B74D0D /* SettingsView.swift */,
+				F994DE5B2DDDA464001A72C9 /* SettingsSwiftUIView.swift */,
 				F94C5A422D81B55C00BD8B70 /* Controllers */,
 			);
 			path = Views;
@@ -419,9 +428,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ToDoCat/Pods-ToDoCat-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ToDoCat/Pods-ToDoCat-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -436,12 +449,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9F977A82D881382006B79FE /* String++.swift in Sources */,
+				F994DE602DDDA6AD001A72C9 /* SettingsSwiftUIViewController.swift in Sources */,
 				F99B3E982D83F82300879AB0 /* UIFont++.swift in Sources */,
 				F99B3E8F2D83F30900879AB0 /* DetailViewController.swift in Sources */,
 				F9224C922D82A37D009E5220 /* ToDoTableView.swift in Sources */,
 				F980AAD82D9C2F1E00E91E97 /* AppCoordinator.swift in Sources */,
 				F99B3E8D2D83EC2D00879AB0 /* DetailView.swift in Sources */,
 				F9F9779F2D87F212006B79FE /* ToDoItemRealm.swift in Sources */,
+				F994DE5E2DDDA5C1001A72C9 /* SettingsViewModelAdapter.swift in Sources */,
 				F9F977A32D8811F7006B79FE /* Date++.swift in Sources */,
 				F99B3E8B2D83D71600879AB0 /* Constants.swift in Sources */,
 				F9224C8C2D827D86009E5220 /* ToDoTableViewCell.swift in Sources */,
@@ -466,6 +481,7 @@
 				F92834C12D8D5BB2001B0EA7 /* ImageService.swift in Sources */,
 				F94C5A3E2D81B48000BD8B70 /* HomeViewController.swift in Sources */,
 				F980AADE2D9C361E00E91E97 /* SettingsCoordinator.swift in Sources */,
+				F994DE5C2DDDA464001A72C9 /* SettingsSwiftUIView.swift in Sources */,
 				F980AAE02D9C385500E91E97 /* MainTabBarCoordinator.swift in Sources */,
 				F9F977A52D8812B7006B79FE /* UIImage++.swift in Sources */,
 				F980AADA2D9C35FF00E91E97 /* HomeCoordinator.swift in Sources */,
@@ -496,7 +512,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.2;
+				CURRENT_PROJECT_VERSION = 1.0.3;
 				DEVELOPMENT_TEAM = MWBS4R8DBQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToDoCat/Info.plist;
@@ -509,7 +525,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-l\"c++\"",
@@ -581,7 +597,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.2;
+				CURRENT_PROJECT_VERSION = 1.0.3;
 				DEVELOPMENT_TEAM = MWBS4R8DBQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToDoCat/Info.plist;
@@ -594,7 +610,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lc++",
