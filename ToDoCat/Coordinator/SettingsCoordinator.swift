@@ -19,8 +19,8 @@ class SettingsCoordinator: Coordinator {
 
     func start() {
         let settingsViewModel = SettingsViewModel(dataManager: dataManager)
-        let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
-        //navigationController.viewControllers = [settingsViewController]
+        //let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
+        let settingsViewController = SettingsSwiftUIViewController(viewModel: settingsViewModel)
         
         navigationController.pushViewController(settingsViewController, animated: false)
     }
