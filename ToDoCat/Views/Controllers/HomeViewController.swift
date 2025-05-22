@@ -65,6 +65,11 @@ class HomeViewController: UIViewController {
             self?.adjustTableViewPosition(for: newHeight)
         }
         
+        // todayButton 클릭 시 데이터 리로드
+        homeView.calendarView.onTodayButtonTapped = { [weak self] in
+            self?.homeViewModel.selectedDateTrigger.accept((Date()))
+        }
+        
         // 필터링된 ToDo리스트
         homeViewModel.filteredToDoItems
             .observe(on: MainScheduler.instance)
