@@ -192,8 +192,20 @@ extension ToDoDataManager: ToDoDataFetchable {
             
             let predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as NSDate, endOfDay as NSDate)
             let realmItems = self.realmManager.getFilteredObjects(ToDoItemRealm.self, predicate: predicate)
+            let todoItems = realmItems.map { $0.toToDoItem() }
             
-            return realmItems.map { $0.toToDoItem() }
+            // 완료되지 않은 아이템 먼저 앞으로 빼고, 생성 시간 오름차순
+            let sortedItems = todoItems.sorted { (first, second) -> Bool in
+                if first.isCompleted == second.isCompleted {
+                    // 둘다 완료 상태면 생성 시간으로 오름차순 정렬
+                    return first.createdAt < second.createdAt
+                } else {
+                    // 완료 안된 항목이 완료된 항목보다 앞에 오도록
+                    return !first.isCompleted && second.isCompleted
+                }
+            }
+            
+            return sortedItems
         } completion: { todoItems in
             completion(todoItems)
         }
