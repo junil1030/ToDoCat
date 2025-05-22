@@ -34,19 +34,11 @@ class CalendarView: UIView {
         return calendar
     }()
     
-    private let datePicker: UIDatePicker = {
-        let picker = UIDatePicker()
-        picker.datePickerMode = .date
-        picker.preferredDatePickerStyle = .automatic
-        picker.backgroundColor = .clear
-        picker.tintColor = UIColor(named: "CalendarColor")
-        return picker
-    }()
-    
     private let dateSelectButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "calendar"), for: .normal)
         button.tintColor = UIColor(named: "CalendarColor")
+        button.backgroundColor = UIColor.clear
         return button
     }()
     
@@ -57,12 +49,48 @@ class CalendarView: UIView {
         return button
     }()
     
+    private lazy var overlayView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        view.isHidden = true
+        return view
+    }()
+    
+    private lazy var datePickerContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.systemBackground
+        view.layer.cornerRadius = 12
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowOpacity = 0.2
+        view.layer.shadowRadius = 8
+        return view
+    }()
+    
+    private lazy var datePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .wheels
+        picker.tintColor = UIColor(named: "CalendarColor")
+        return picker
+    }()
+    
+    private lazy var selectButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("선택완료", for: .normal)
+        button.titleLabel?.font = UIFont.dohyeon(size: 16)
+        button.setTitleColor(UIColor(named: "CalendarSelectColor"), for: .normal)
+        button.backgroundColor = UIColor(named: "CalendarColor")
+        button.layer.cornerRadius = 8
+        return button
+    }()
+    
     private var calendarHeightConstraint: Constraint?
     private let weekHeight: CGFloat = 150
     private let monthHeight: CGFloat = 300
     
     var didChangeHeight: ((CGFloat) -> Void)?
-    var onTodayButtonTapped: (() -> Void)?
+    var onDateSelected: ((Date) -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -80,7 +108,12 @@ class CalendarView: UIView {
         
         addSubview(calendarView)
         addSubview(todayButton)
-        addSubview(datePicker)
+        addSubview(dateSelectButton)
+        
+        addSubview(overlayView)
+        overlayView.addSubview(datePickerContainerView)
+        datePickerContainerView.addSubview(datePicker)
+        datePickerContainerView.addSubview(selectButton)
         
         calendarView.scope = .month
         
@@ -95,12 +128,36 @@ class CalendarView: UIView {
             make.width.height.equalTo(24)
         }
         
-        datePicker.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.top.equalToSuperview().offset(5)
-            make.width.equalTo(130)
-            make.height.equalTo(35)
+        dateSelectButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(16)
+            make.width.height.equalTo(24)
         }
+        
+        // 오버레이 레이아웃
+        overlayView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        datePickerContainerView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalToSuperview().multipliedBy(0.8)
+        }
+        
+        datePicker.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalToSuperview().multipliedBy(0.7)
+        }
+        
+        selectButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(16)
+            make.height.equalToSuperview().multipliedBy(0.2)
+        }
+        
+        // 오버레이 탭 제스처 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
+        overlayView.addGestureRecognizer(tapGesture)
     }
     
     private func setupGesture() {
@@ -111,17 +168,48 @@ class CalendarView: UIView {
     
     private func setupActions() {
         todayButton.addTarget(self, action: #selector(todayButtonTapped), for: .touchUpInside)
-        
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        dateSelectButton.addTarget(self, action: #selector(dateSelectButtonTapped), for: .touchUpInside)
+        selectButton.addTarget(self, action: #selector(selectButtonTapped), for: .touchUpInside)
     }
     
     @objc private func todayButtonTapped() {
         selectDate(Date())
-        onTodayButtonTapped?()
+        onDateSelected?(Date())
     }
     
-    @objc private func datePickerValueChanged() {
-        selectDate(datePicker.date)
+    @objc private func dateSelectButtonTapped() {
+        showDatePicker()
+    }
+    
+    @objc private func overlayTapped() {
+        hideDatePicker()
+    }
+    
+    @objc private func selectButtonTapped() {
+        let selectedDate = datePicker.date
+        selectDate(selectedDate)
+        onDateSelected?(selectedDate)
+        hideDatePicker()
+    }
+    
+    // DatePicker 표시
+    private func showDatePicker() {
+        datePicker.date = calendarView.selectedDate ?? Date()
+        overlayView.isHidden = false
+        overlayView.alpha = 0
+        
+        UIView.animate(withDuration: 0.3) {
+            self.overlayView.alpha = 1
+        }
+    }
+    
+    // DatePicker 숨기기
+    private func hideDatePicker() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.overlayView.alpha = 0
+        }) { _ in
+            self.overlayView.isHidden = true
+        }
     }
     
     @objc func panGestureHandler(gesture: UIPanGestureRecognizer) {
