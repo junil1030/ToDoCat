@@ -204,6 +204,11 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         cell.configure(with: entry)
         cell.accessoryType = .disclosureIndicator
         
+        cell.onCheckBoxToggle = { [weak self] in
+            cell.checkBoxButton.isSelected = !cell.checkBoxButton.isSelected
+            self?.homeViewModel.toggleCompletionTrigger.accept(entry.id)
+        }
+        
         return cell
     }
     
