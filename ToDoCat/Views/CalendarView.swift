@@ -62,6 +62,7 @@ class CalendarView: UIView {
     private let monthHeight: CGFloat = 300
     
     var didChangeHeight: ((CGFloat) -> Void)?
+    var onTodayButtonTapped: (() -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -115,14 +116,12 @@ class CalendarView: UIView {
     }
     
     @objc private func todayButtonTapped() {
-        print("todayButton")
         selectDate(Date())
+        onTodayButtonTapped?()
     }
     
     @objc private func datePickerValueChanged() {
-        print("datePickerValueChanged")
         selectDate(datePicker.date)
-        
     }
     
     @objc func panGestureHandler(gesture: UIPanGestureRecognizer) {
