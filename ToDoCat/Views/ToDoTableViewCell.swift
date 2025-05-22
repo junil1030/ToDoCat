@@ -12,6 +12,14 @@ class ToDoTableViewCell: UITableViewCell {
     
     static let identifier = "ToDoTableViewCell"
     
+    let checkBoxButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "square"), for: .normal)
+        button.setImage(UIImage(systemName: "checkmark.square"), for: .selected)
+        button.tintColor = UIColor(named: "CalendarColor")
+        return button
+    }()
+    
     private let toDoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -54,6 +62,8 @@ class ToDoTableViewCell: UITableViewCell {
         stackView.alignment = .center
         return stackView
     }()
+    
+    var onCheckBoxToggle: (() -> Void)?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
          super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -71,6 +81,7 @@ class ToDoTableViewCell: UITableViewCell {
         
         contentView.addSubview(containerStackView)
         
+        containerStackView.addArrangedSubview(checkBoxButton)
         containerStackView.addArrangedSubview(toDoImageView)
         containerStackView.addArrangedSubview(contentStackView)
         
@@ -81,15 +92,26 @@ class ToDoTableViewCell: UITableViewCell {
             make.edges.equalToSuperview().inset(10)
         }
         
+        checkBoxButton.snp.makeConstraints { make in
+            make.width.height.equalTo(30)
+        }
+        
         toDoImageView.snp.makeConstraints { make in
             make.width.height.equalTo(50)
         }
-
+        
+        checkBoxButton.addTarget(self, action: #selector(checkBoxTapped), for: .touchUpInside)
+    }
+    
+    @objc private func checkBoxTapped() {
+        onCheckBoxToggle?()
     }
     
     // MARK: - Configuration
     func configure(with item: ToDoItem) {
         contentPreviewLabel.text = item.content
+        
+        checkBoxButton.isSelected = item.isCompleted
         
         if let image = item.image {
             toDoImageView.image = image
