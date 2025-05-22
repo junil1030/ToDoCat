@@ -11,7 +11,7 @@ import RxCocoa
 class HomeViewModel {
     
     //MARK: - Properties
-    private var dataManager: ToDoDataFetchable & ToDoDataDeletable & ToDoDataObserver
+    private var dataManager: ToDoDataFetchable & ToDoDataDeletable & ToDoDataEditable & ToDoDataObserver
     private var disposeBag = DisposeBag()
     
     //MARK: - Rx Streams
@@ -21,6 +21,7 @@ class HomeViewModel {
     let deleteItemTrigger = PublishRelay<UUID>()
     let selectItemTrigger = PublishRelay<IndexPath>()
     let addNewItemTrigger = PublishRelay<Void>()
+    let toggleCompletionTrigger = PublishRelay<UUID>()
     
     // 출력
     let allToDoItems = BehaviorRelay<[ToDoItem]>(value: [])
@@ -40,7 +41,7 @@ class HomeViewModel {
     var cellToDetailView: ((ToDoItem) -> Void)?
     
     //MARK: - Initialization
-    init(dataManager: ToDoDataFetchable & ToDoDataDeletable & ToDoDataObserver) {
+    init(dataManager: ToDoDataFetchable & ToDoDataDeletable & ToDoDataEditable & ToDoDataObserver) {
         self.dataManager = dataManager
         setupBindings()
     }
@@ -64,7 +65,6 @@ class HomeViewModel {
         
         // 날짜 선택 시 해당 날짜 항목 필터링
         selectedDateTrigger
-            .distinctUntilChanged { Calendar.current.isDate($0, inSameDayAs: $1) }
             .flatMapLatest { [weak self] date -> Observable<[ToDoItem]> in
                 guard let self = self else { return .just([]) }
                 return self.fetchToDosforDate(date)
@@ -87,6 +87,25 @@ class HomeViewModel {
                     self?.success.accept("삭제되었습니다.")
                 case .failure(let error):
                     self?.error.accept("삭제에 실패했습니다: \(error.localizedDescription)")
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        // 완료 상태 토글 처리
+        toggleCompletionTrigger
+            .do(onNext: { [weak self] _ in self?.isLoading.accept(true)})
+            .flatMapLatest { [weak self] id -> Observable<Result<Void, Error>> in
+                guard let self = self else { return .just(.failure(NSError(domain: "ToDoCat", code: -1, userInfo: nil))) }
+                return self.toggleCompletion(id: id)
+            }
+            .do(onNext: { [weak self] _ in self?.isLoading.accept(false) })
+            .subscribe(onNext: { [weak self] result in
+                switch result {
+                case .success:
+                    let currentDate = self?.selectedDateTrigger.value ?? Date()
+                    self?.selectedDateTrigger.accept(currentDate)
+                case .failure(let error):
+                    self?.error.accept("상태 변경에 실패했습니다: \(error.localizedDescription)")
                 }
             })
             .disposed(by: disposeBag)
@@ -185,6 +204,22 @@ class HomeViewModel {
             }
             
             self.dataManager.deleteToDo(id: id) { result in
+                observer.onNext(result)
+                observer.onCompleted()
+            }
+            
+            return Disposables.create()
+        }
+    }
+    
+    private func toggleCompletion(id: UUID) -> Observable<Result<Void, Error>> {
+        return Observable.create { [weak self] observer in
+            guard let self = self else {
+                observer.onCompleted()
+                return Disposables.create()
+            }
+            
+            self.dataManager.toggleCompletion(id: id) { result in
                 observer.onNext(result)
                 observer.onCompleted()
             }
