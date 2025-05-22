@@ -83,7 +83,9 @@ class HomeViewModel {
             .subscribe(onNext: { [weak self] result in
                 switch result {
                 case .success:
-                    self?.loadDataTrigger.accept(())
+                    let currentDate = self?.selectedDateTrigger.value ?? Date()
+                    self?.selectedDateTrigger.accept(currentDate)
+                    print(currentDate)
                     self?.success.accept("삭제되었습니다.")
                 case .failure(let error):
                     self?.error.accept("삭제에 실패했습니다: \(error.localizedDescription)")
