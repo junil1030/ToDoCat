@@ -43,6 +43,13 @@ class HomeViewController: UIViewController {
         homeViewModel.loadDataTrigger.accept(())
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let currentDate = homeViewModel.getSelectedDate()
+        homeViewModel.selectedDateTrigger.accept(currentDate)
+    }
+    
     //MARK: - Setup Methods
     private func setupNavigationBar() {
         let rigthButton = UIBarButtonItem(
@@ -65,9 +72,9 @@ class HomeViewController: UIViewController {
             self?.adjustTableViewPosition(for: newHeight)
         }
         
-        // todayButton 클릭 시 데이터 리로드
-        homeView.calendarView.onTodayButtonTapped = { [weak self] in
-            self?.homeViewModel.selectedDateTrigger.accept((Date()))
+        // 날짜 변경 시 해당 데이터 리로드
+        homeView.calendarView.onDateSelected = { [weak self] date in
+            self?.homeViewModel.selectedDateTrigger.accept(date)
         }
         
         // 필터링된 ToDo리스트
